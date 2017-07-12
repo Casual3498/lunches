@@ -21,6 +21,8 @@ gem 'carrierwave', '~> 1.0'
 
 gem 'haml'
 
+
+
 # Use Puma as the app server
 gem 'puma', '~> 3.7'
 # Use SCSS for stylesheets
@@ -50,6 +52,9 @@ group :development, :test do
   # Adds support for Capybara system testing and selenium driver
   gem 'capybara', '~> 2.13'
   gem 'selenium-webdriver'
+ 
+  gem "database_cleaner"
+  gem "rspec-rails"
 end
 
 group :development do
