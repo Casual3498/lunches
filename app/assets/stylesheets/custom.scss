@@ -3,10 +3,17 @@
 
 
 
-/* universal */
+/* universal */ 
 
 body {
   padding-top: 60px;
+  background-color: #f2f2f2;
+  color: #555;
+  font-weight: 300;
+  font-size: 16;
+  -webkit-font-smoothing: antialiased;
+  -webkit-overflow-scrolling: touch;
+//  margin-top: 70px; 
 }
 
 .center {

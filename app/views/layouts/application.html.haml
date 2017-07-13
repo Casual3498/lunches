@@ -2,7 +2,11 @@
 
 %html
   %head
-    %meta charset="utf-8"
+
+    %meta{:charset => "utf-8"}
+    -#for mobile devices
+    %meta{:name => "viewport", :content => "width=device-width, initial-scale=1.0"}
+
     %title #{full_title(yield(:title))}
     = csrf_meta_tags 
     = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload'
@@ -10,19 +14,26 @@
 
   %body
 
-  %header.navbar.navbar-fixed-top.navbar-inverse
+    %header.navbar.navbar-fixed-top.navbar-inverse
+      .container
+        .navbar-header
+          %button{:type => "button", :class => "navbar-toggle", 'data-toggle' => 'collapse', 'data-target' => "navbar-collapse"}
+            %span.icon-bar
+            %span.icon-bar
+            %span.icon-bar
+          %a.navbar-brand{:href => "#"} Lunches
+
+-# = link_to "Lunches", '#', id: "logo"
+-# %nav
+-# %ul.nav.navbar-nav.navbar-right
+-# %li 
+-# = link_to "Users",   '#'
+-# %li 
+-# = link_to "Log in", '#' 
+            
+    -if notice
+      %p.alert.alert-success= notice
+    -if alert
+      %p.alert.alert-danger= alert
     .container
-    = link_to "Lunches", '#', id: "logo"
-    %nav
-      %ul.nav.navbar-nav.navbar-right
-        %li 
-          = link_to "Users",   '#'
-        %li 
-          = link_to "Log in", '#' 
-          
-  -if notice
-    %p.alert.alert-success= notice
-  -if alert
-    %p.alert.alert-danger= alert
-  .container
-  = yield
+      = yield
