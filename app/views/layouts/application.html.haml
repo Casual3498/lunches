@@ -1,15 +1,28 @@
 !!! 5
--provide(:title, 'Dashboard')
+
 %html
   %head
-    %title Lunches | #{yield(:title)}
+    %meta charset="utf-8"
+    %title #{full_title(yield(:title))}
     = csrf_meta_tags 
     = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload'
     = javascript_include_tag 'application', 'data-turbolinks-track': 'reload' 
 
   %body
+
+  %header.navbar.navbar-fixed-top.navbar-inverse
+    .container
+    = link_to "Lunches", '#', id: "logo"
+    %nav
+      %ul.nav.navbar-nav.navbar-right
+        %li 
+          = link_to "Users",   '#'
+        %li 
+          = link_to "Log in", '#' 
+          
   -if notice
     %p.alert.alert-success= notice
   -if alert
-    %p.alert.alert-danger= alert 
+    %p.alert.alert-danger= alert
+  .container
   = yield
