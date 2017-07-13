@@ -23,6 +23,8 @@ gem 'haml'
 
 gem 'font-awesome-sass', '~> 4.7.0'
 
+gem 'jquery-rails'
+
 
 # Use Puma as the app server
 gem 'puma', '~> 3.7'

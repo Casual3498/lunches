@@ -18,20 +18,17 @@
       .container
         .navbar-header
           -#for mobile
-          %button{:type => "button", :class => "navbar-toggle", 'data-toggle' => 'collapse', 'data-target' => "navbar-collapse"}
+          %button{:type => "button", :class => "navbar-toggle", 'data-toggle' => 'collapse', 'data-target' => ".navbar-collapse"}
             %span.icon-bar
             %span.icon-bar
             %span.icon-bar
-          %a.navbar-brand{:href => "#"} <i class="fa fa-coffee"></i> Lunches <i class="fa fa-cutlery"></i>
-
-
--# = link_to "Lunches", '#', id: "logo"
--# %nav
--# %ul.nav.navbar-nav.navbar-right
--# %li 
--# = link_to "Users",   '#'
--# %li 
--# = link_to "Log in", '#' 
+          %a.navbar-brand#logo{:href => "#"} Lunches <i class="fa fa-cutlery"></i> 
+        .navbar-collapse.collapse
+          %ul.nav.navbar-nav.navbar-right
+            %li 
+              = link_to "Users",   '#'
+            %li.active 
+              = link_to "Log in", '#' 
             
     -if notice
       %p.alert.alert-success= notice
