@@ -21,6 +21,7 @@ gem 'carrierwave', '~> 1.0'
 
 gem 'haml'
 
+gem 'font-awesome-sass', '~> 4.7.0'
 
 
 # Use Puma as the app server
