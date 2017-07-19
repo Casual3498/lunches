@@ -10,10 +10,50 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170712081639) do
+ActiveRecord::Schema.define(version: 20170718104752) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "course_types", force: :cascade do |t|
+    t.string "name", limit: 20, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_course_types_on_name", unique: true
+  end
+
+  create_table "currency_types", force: :cascade do |t|
+    t.string "name", limit: 20, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_currency_types_on_name", unique: true
+  end
+
+  create_table "menus", force: :cascade do |t|
+    t.string "name", limit: 50, null: false
+    t.decimal "cost", precision: 10, scale: 2
+    t.bigint "course_types_id", null: false
+    t.bigint "currency_types_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.date "menu_date", null: false
+    t.index ["course_types_id"], name: "index_menus_on_course_types_id"
+    t.index ["currency_types_id"], name: "index_menus_on_currency_types_id"
+    t.index ["name", "course_types_id", "menu_date"], name: "name_uq", unique: true
+  end
+
+  create_table "orders", force: :cascade do |t|
+    t.bigint "users_id", null: false
+    t.bigint "menus_id", null: false
+    t.bigint "course_types_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.date "order_date", null: false
+    t.index ["course_types_id"], name: "index_orders_on_course_types_id"
+    t.index ["menus_id"], name: "index_orders_on_menus_id"
+    t.index ["users_id", "course_types_id", "menus_id", "order_date"], name: "course_type_uq", unique: true
+    t.index ["users_id"], name: "index_orders_on_users_id"
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
@@ -28,6 +68,7 @@ ActiveRecord::Schema.define(version: 20170712081639) do
     t.inet "last_sign_in_ip"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "name", limit: 20, null: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end

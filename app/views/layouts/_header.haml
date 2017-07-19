@@ -1,0 +1,25 @@
+%header.navbar.navbar-fixed-top.navbar-inverse
+  .container
+    .navbar-header
+      -#for mobile
+      %button{:type => "button", :class => "navbar-toggle", 'data-toggle' => 'collapse', 'data-target' => ".navbar-collapse"}
+        %span.icon-bar
+        %span.icon-bar
+        %span.icon-bar
+      %a.navbar-brand#logo{:href => root_path} 
+        Lunches
+        .fa.fa-cutlery 
+    .navbar-collapse.collapse
+      %ul.nav.navbar-nav.navbar-right
+        -if user_signed_in? 
+          .navbar-text 
+            Logged in as 
+            %strong #{current_user.email}
+            -if current_user.is_lunches_admin?
+              %font{"color" => "red"} #{"You Are The Lunches Admin".upcase }
+          %li= link_to 'Users', users_path, :class => 'navbar-link' if current_user.is_lunches_admin?
+          %li= link_to 'Edit profile', edit_user_registration_path, :class => 'navbar-link' 
+          %li= link_to "Logout", destroy_user_session_path, method: :delete, :class => 'navbar-link'
+        -else
+          %li= link_to "Sign up", new_user_registration_path, :class => 'navbar-link' 
+          %li= link_to "Login", new_user_session_path, :class => 'navbar-link' 

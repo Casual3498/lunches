@@ -1,0 +1,16 @@
+.row
+  .col-md-offset-2.col-md-8
+    .panel
+      .panel-heading.panel-info
+        %h1 User profile
+      .panel-body
+        .list_group
+          %h3
+          .list-group-item.list-group-item-info 
+            .fa.fa-drivers-license-o
+            Name: #{@user.name}
+          .list-group-item.list-group-item-info 
+            .fa.fa-envelope-o
+            Email: #{@user.email}
+
+= link_to "<< Back", :back
