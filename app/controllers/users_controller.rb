@@ -15,7 +15,7 @@ class UsersController < ApplicationController
   def correct_user
     @user = User.find(params[:id])
     if (current_user != @user) && (!current_user.is_lunches_admin?)  
-      flash[:alert] = "You not allowed to see other user profiles."
+      flash[:alert] = "You not allowed to see other users profiles."
       redirect_to(root_url)
     end
   end
