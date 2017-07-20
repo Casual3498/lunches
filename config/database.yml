@@ -42,3 +42,12 @@ test:
   timeout: 5000
   username: serge
   password:
+
+production:
+  adapter: postgresql
+  encoding: unicode
+  database: lunches_test
+  pool: 5
+  timeout: 5000
+  username: serge
+  password:
