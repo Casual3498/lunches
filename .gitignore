@@ -23,7 +23,7 @@
 .byebug_history
 
 # Игнорирование прочих ненужных файлов.
-database.yml
+#database.yml
 doc/
 *.swp
 *~
