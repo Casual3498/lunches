@@ -1,7 +1,8 @@
 Rails.application.routes.draw do
 
+  root 'static_pages#home'
 
-  root 'static_pages#dashboard'
+  get '/home', to: 'static_pages#home'
 
   get '/privacy_notice', to: 'static_pages#privacy_notice'
 

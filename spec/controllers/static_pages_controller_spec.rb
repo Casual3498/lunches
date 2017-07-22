@@ -2,16 +2,9 @@ require 'rails_helper'
 
 RSpec.describe StaticPagesController, type: :controller do
 
-  describe "GET #PrivacyNotice" do
+  describe "GET #home" do
     it "returns http success" do
-      get :PrivacyNotice
-      expect(response).to have_http_status(:success)
-    end
-  end
-
-  describe "GET #ConditionsOfUse" do
-    it "returns http success" do
-      get :ConditionsOfUse
+      get :home
       expect(response).to have_http_status(:success)
     end
   end
