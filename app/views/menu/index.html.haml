@@ -8,8 +8,8 @@
           #week
             = link_to date: @date.prev_week do
               %i.fa.fa-angle-double-left
-            %i.fa.fa-calendar{'aria-hidden'=>"true"}
 
+            %i.fa.fa-calendar{'aria-hidden'=>"true"}
             = @date.strftime("week %U ")
             = month_of_week(@date)
             = @date.strftime(" %Y")
