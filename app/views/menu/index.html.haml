@@ -1,0 +1,43 @@
+.row
+  .col-md-12
+    .panel
+      .panel-heading.panel-info
+        %h1 Menus
+      .panel-body
+        #menus
+          #week
+            = link_to date: @date.prev_week do
+              %i.fa.fa-angle-double-left
+            %i.fa.fa-calendar{'aria-hidden'=>"true"}
+
+            = @date.strftime("week %U ")
+            = month_of_week(@date)
+            = @date.strftime(" %Y")
+
+            = link_to date: @date.next_week do
+              %i.fa.fa-angle-double-right        
+          = calendar(@date, @holidays, @weekdays)  do |date| 
+            = date.day
+
+
+//#menus
+//%h2#month
+/ = calendar( @date ) do |date|
+/   = date.day
+
+
+
+
+/         = calendar(:year => @year, :month => @month, :first_day_of_week => 1) do |d|
+/          - render_calendar_cell(d) 
+/        #datetimepicker_menus
+/
+/%script{:type => "text/javascript"}
+/  $(function () {
+/  $('#datetimepicker_menus').datetimepicker({
+/  inline: true,
+/  viewMode: 'days',
+/  format: 'YYYY-MM-DD',
+/  daysOfWeekDisabled: [0,6]
+/  });
+/  });
