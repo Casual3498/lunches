@@ -1,23 +1,24 @@
 .row
-  .col-md-12
-    .panel
-      .panel-heading.panel-info
-        %h1 Menus
-      .panel-body
-        #menus
-          #week
-            = link_to date: @date.prev_week do
-              %i.fa.fa-angle-double-left
+  .col-xs-12
+    .table-responsive
+      .panel
+        .panel-heading.panel-info
+          %h1 Menus
+        .panel-body
+          #menus
+            #week
+              = link_to date: @date.prev_week do
+                %i.fa.fa-angle-double-left
 
-            %i.fa.fa-calendar{'aria-hidden'=>"true"}
-            = @date.strftime("week %U ")
-            = month_of_week(@date)
-            = @date.strftime(" %Y")
+              %i.fa.fa-calendar{'aria-hidden'=>"true"}
+              = @date.strftime("week %U ")
+              = month_of_week(@date)
+              = @date.strftime(" %Y")
 
-            = link_to date: @date.next_week do
-              %i.fa.fa-angle-double-right        
-          = calendar(@date, @holidays, @weekdays)  do |date| 
-            = date.day
+              = link_to date: @date.next_week do
+                %i.fa.fa-angle-double-right        
+            = calendar(@date, @holidays, @weekdays)  do |date| 
+              = date.day
 
 
 //#menus
