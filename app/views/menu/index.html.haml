@@ -5,18 +5,19 @@
         %h1 Menus
       .panel-body
         #menus
-          .table-responsive
-            #week
-              = link_to date: @date.prev_week do
-                %i.fa.fa-angle-double-left
 
-              %i.fa.fa-calendar{'aria-hidden'=>"true"}
-              = @date.strftime("week %U ")
-              = month_of_week(@date)
-              = @date.strftime(" %Y")
+          #week
+            = link_to date: @date.prev_week do
+              %i.fa.fa-angle-double-left
 
-              = link_to date: @date.next_week do
-                %i.fa.fa-angle-double-right        
+            %i.fa.fa-calendar{'aria-hidden'=>"true"}
+            = @date.strftime("week %U ")
+            = month_of_week(@date)
+            = @date.strftime(" %Y")
+
+            = link_to date: @date.next_week do
+              %i.fa.fa-angle-double-right    
+          .table-responsive              
             = calendar(@date, @holidays, @weekdays)  do |date| 
               = date.day
 
