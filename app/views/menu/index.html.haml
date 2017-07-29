@@ -1,11 +1,11 @@
 .row
   .col-xs-12
-    .table-responsive
-      .panel
-        .panel-heading.panel-info
-          %h1 Menus
-        .panel-body
-          #menus
+    .panel
+      .panel-heading.panel-info
+        %h1 Menus
+      .panel-body
+        #menus
+          .table-responsive
             #week
               = link_to date: @date.prev_week do
                 %i.fa.fa-angle-double-left
