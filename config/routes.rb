@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
 
-  root 'static_pages#home'
+  get '/menus', to: 'menu#index'
 
   get '/home', to: 'static_pages#home'
 
@@ -18,5 +18,6 @@ Rails.application.routes.draw do
 
   get '/users/:id', to: 'users#show', :as => :user
 
+  root 'static_pages#home'
 
 end
