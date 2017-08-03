@@ -32,27 +32,27 @@ ActiveRecord::Schema.define(version: 20170718104752) do
   create_table "menus", force: :cascade do |t|
     t.string "name", limit: 50, null: false
     t.decimal "cost", precision: 10, scale: 2
-    t.bigint "course_types_id", null: false
-    t.bigint "currency_types_id", null: false
+    t.bigint "course_type_id", null: false
+    t.bigint "currency_type_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.date "menu_date", null: false
-    t.index ["course_types_id"], name: "index_menus_on_course_types_id"
-    t.index ["currency_types_id"], name: "index_menus_on_currency_types_id"
-    t.index ["name", "course_types_id", "menu_date"], name: "name_uq", unique: true
+    t.index ["course_type_id"], name: "index_menus_on_course_type_id"
+    t.index ["currency_type_id"], name: "index_menus_on_currency_type_id"
+    t.index ["name", "course_type_id", "menu_date"], name: "name_uq", unique: true
   end
 
   create_table "orders", force: :cascade do |t|
-    t.bigint "users_id", null: false
-    t.bigint "menus_id", null: false
-    t.bigint "course_types_id", null: false
+    t.bigint "user_id", null: false
+    t.bigint "menu_id", null: false
+    t.bigint "course_type_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.date "order_date", null: false
-    t.index ["course_types_id"], name: "index_orders_on_course_types_id"
-    t.index ["menus_id"], name: "index_orders_on_menus_id"
-    t.index ["users_id", "course_types_id", "menus_id", "order_date"], name: "course_type_uq", unique: true
-    t.index ["users_id"], name: "index_orders_on_users_id"
+    t.index ["course_type_id"], name: "index_orders_on_course_type_id"
+    t.index ["menu_id"], name: "index_orders_on_menu_id"
+    t.index ["user_id", "course_type_id", "menu_id", "order_date"], name: "course_type_uq", unique: true
+    t.index ["user_id"], name: "index_orders_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|

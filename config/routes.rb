@@ -1,6 +1,9 @@
 Rails.application.routes.draw do
 
-  get '/menus', to: 'menu#index'
+
+  get '/menus', to: 'menus#index'
+
+  #get 'menus/:id', to: 'menus#show', :as => :menu
 
   get '/home', to: 'static_pages#home'
 

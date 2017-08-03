@@ -1,0 +1,46 @@
+.row
+  .col-xs-12
+    .panel
+      .panel-heading.panel-info
+        %h1 Menus
+      .panel-body
+        #menus
+          #week
+            = link_to date: @date.prev_week do
+              %i.fa.fa-angle-double-left
+            %i.fa.fa-calendar{'aria-hidden'=>"true"}
+            = text_of_week(@date)
+            = link_to date: @date.next_week do
+              %i.fa.fa-angle-double-right    
+          .table-responsive              
+            = calendar(@date, @options)  do |date| 
+              = date.day
+              -if @menus_by_date[date]
+                %ul
+                  -@menus_by_date[date].each do |menu|
+                    %li 
+                      =menu.name
+    -if current_user.is_lunches_admin?                  
+      .panel.cur-menu
+        .panel-heading.panel-info
+          %h1 
+            Menu on 
+            .fa.fa-asterisk
+            #{Date.today.strftime("%A %F")}
+            .fa.fa-asterisk
+        .panel-body
+          .table-responsive
+            %table.table
+              %thead
+                %tr
+                  %th first_course
+                  %th cost
+              %tbody
+                -if @menus_by_date[Date.today]
+                  -@menus_by_date[Date.today].each do |menu|
+                    %tr
+                      %td
+                        =menu.name
+                      %td
+                        =menu.cost
+        
