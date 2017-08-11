@@ -59,12 +59,9 @@ module CalendarHelper
 
     def day_classes(day)
       holidays = options[:holidays]
-      #debugger
-      weekdays = options[:weekdays]
-      #:options['holidays']
+      weekdays = options[:weekdays]   
       classes = []
       classes << "today" if day == Date.today
-      #classes << "notmonth" if day.month != date.month
       classes << "holidays" if ( [0,6].include?(day.wday)  || holidays.include?(day.to_s) ) && !weekdays.include?(day.to_s)
       classes << "weekdays" if ( (1..5).include?(day.wday) && !holidays.include?(day.to_s) ) || weekdays.include?(day.to_s)
       classes.empty? ? nil : classes.join(" ")

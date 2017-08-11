@@ -31,7 +31,7 @@ ActiveRecord::Schema.define(version: 20170718104752) do
 
   create_table "menus", force: :cascade do |t|
     t.string "name", limit: 50, null: false
-    t.decimal "cost", precision: 10, scale: 2
+    t.decimal "cost", precision: 10, scale: 2, null: false
     t.bigint "course_type_id", null: false
     t.bigint "currency_type_id", null: false
     t.datetime "created_at", null: false

@@ -15,11 +15,7 @@
           .table-responsive              
             = calendar(@date, @options)  do |date| 
               = date.day
-              -if @menus_by_date[date]
-                %ul
-                  -@menus_by_date[date].each do |menu|
-                    %li 
-                      =menu.name
+
     -if current_user.is_lunches_admin?                  
       .panel.cur-menu
         .panel-heading.panel-info
@@ -29,18 +25,41 @@
             #{Date.today.strftime("%A %F")}
             .fa.fa-asterisk
         .panel-body
-          .table-responsive
-            %table.table
-              %thead
-                %tr
-                  %th first_course
-                  %th cost
-              %tbody
-                -if @menus_by_date[Date.today]
-                  -@menus_by_date[Date.today].each do |menu|
+          #menu_today
+            .currency_select
+              %select#currency_select
+                -@currency_type.each do |currency_type|
+                  %option{value: currency_type.id}
+                    =currency_type.name  
+                                           
+            -@course_type.each do |course_type| 
+              .table-responsive
+                %table.table.table-bordered
+                  %thead
                     %tr
-                      %td
-                        =menu.name
-                      %td
-                        =menu.cost
+                      %th.name 
+                        =course_type.name      
+                      %th.image image
+                      %th.cost cost (#{@currency_name})
+                      %th.delete delete
+                  %tbody
+                    -if @menus_by_course_type[course_type.id]
+                      -@menus_by_course_type[course_type.id].each do |menu|
+                        %tr
+                          %td.name
+                            =menu.name
+                          %td.image
+                          %td.cost
+                            ="%.2f" % menu.cost
+                            
+                          %td.delete
+                            =link_to 'Delete', menu, method: :delete, data: { confirm: 'Are you sure?' }
+                / .input_fom
+                /   =simple_form_for @menus_by_course_type[course_type_id] do |menu|
+                /     =menu.input :name
+                /     =menu.input :cost
+                /     =menu.button :submit
+
+    
+
         

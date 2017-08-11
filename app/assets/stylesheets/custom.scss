@@ -209,6 +209,7 @@ h5{
 #menus .calendar {
   border-collapse: collapse;
   width: 100%;
+  table-layout:fixed;
 
   td, th {
     font-family: "Lucida Grande", arial, helvetica, sans-serif;
@@ -241,6 +242,7 @@ h5{
     height: 150px;
     vertical-align: top;
     font-size: 28px;
+    overflow: hidden; 
 
      &.weekdays {
       background-color: $td-background-color-weekday;
@@ -256,6 +258,54 @@ h5{
     }     
   }
 
+}
+
+#menu_today .table {
+  width: 100%;
+  table-layout:fixed;
+  th {
+    background: $gray-medium-light;
+    color: $gray;
+    text-align: center;
+    &.name {
+      width: 65%;
+    }
+    &.image {
+      width: 10%;
+    }
+    &.cost {
+      width: 20%;
+      text-align: right;
+      padding-right: 5%;      
+    }
+
+    &.delete {
+      width: 5%;
+    }        
+  }
+  td {
+    
+    &.name {
+      text-align: left;
+    }
+    &.image {
+      
+    }
+    &.cost {
+      text-align: right;
+      padding-right: 5%;
+    }
+    &.delete {
+      text-align: center;
+    }    
+  }  
+}
+
+
+.currency_select {
+  text-align: right;
+  margin-bottom: 2px;
+  margin-right: 5%;
 }
 
 #menus #week {

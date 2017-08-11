@@ -1,7 +1,9 @@
 Rails.application.routes.draw do
 
+  root 'static_pages#home'
 
-  get '/menus', to: 'menus#index'
+  
+  #get '/menus', to: 'menus#index'
 
   #get 'menus/:id', to: 'menus#show', :as => :menu
 
@@ -17,10 +19,10 @@ Rails.application.routes.draw do
 
   devise_for :users
 
-  get '/users', to: 'users#index'
+  get '/users', to: 'users#index' 
 
-  get '/users/:id', to: 'users#show', :as => :user
+  get '/users/:id', to: 'users#show', as: :user
 
-  root 'static_pages#home'
+  resources :menus
 
 end
