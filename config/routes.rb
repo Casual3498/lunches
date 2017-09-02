@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+#Lunches::Application.routes.draw do
+
   root 'static_pages#home'
 
   
@@ -23,6 +25,8 @@ Rails.application.routes.draw do
 
   get '/users/:id', to: 'users#show', as: :user
 
-  resources :menus
+  resources :menus do
+    get "delete"
+  end
 
 end

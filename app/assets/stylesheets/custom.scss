@@ -1,3 +1,4 @@
+
 @import "bootstrap-sprockets";
 @import "bootstrap";
 @import "font-awesome-sprockets";
@@ -26,8 +27,6 @@ $column-count: 7;
 
 
 
-
-
 @mixin box_sizing {
   -moz-box-sizing:    border-box;
   -webkit-box-sizing: border-box;
@@ -35,7 +34,7 @@ $column-count: 7;
 }
 
 
-/* universal */ 
+// universal  
 
 body {
   padding-top: 60px;
@@ -260,9 +259,9 @@ h5{
 
 }
 
-#menu_today .table {
+#menu-today .table {
   width: 100%;
-  table-layout:fixed;
+  table-layout: fixed;
   th {
     background: $gray-medium-light;
     color: $gray;
@@ -274,21 +273,29 @@ h5{
       width: 10%;
     }
     &.cost {
-      width: 20%;
+      width: 15%;
       text-align: right;
-      padding-right: 5%;      
+      padding-right: 5%; 
+
     }
 
     &.delete {
-      width: 5%;
+      width: 10%;
     }        
   }
   td {
     
+    vertical-align: middle; 
+
     &.name {
       text-align: left;
     }
     &.image {
+      .td_image{
+ 
+        width: 100%;
+        cursor:pointer;
+      }
       
     }
     &.cost {
@@ -297,15 +304,21 @@ h5{
     }
     &.delete {
       text-align: center;
+      a {
+
+      }
     }    
   }  
 }
 
 
-.currency_select {
+#currency {
   text-align: right;
   margin-bottom: 2px;
-  margin-right: 5%;
+  margin-right: 10%;
+  #currency_select{
+    width: 16.5%;
+  }
 }
 
 #menus #week {
@@ -324,7 +337,28 @@ h5{
   }
 }
 
-// #menus ul {
-//   font-size: 11px;
-//   padding-left: 20px;
-// }
+.modal-dialog {
+  &.delete-modal{
+    text-align: center;
+  }
+
+  .modal-content{
+    .modal-header{
+      &.delete-modal{
+        background-color: $hover_red;
+        color: black;
+      }
+
+      &.update-modal{
+        background-color: $gray-light;
+        text-align: center;
+      }
+
+    }
+    .modal-footer{
+      text-align: center;     
+    }  
+  }
+}
+
+

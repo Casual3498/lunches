@@ -1,0 +1,41 @@
+
+-if @menus_by_course_type[course_type.id]
+  -@menus_by_course_type[course_type.id].each do |menu|
+    %tr.menu_row
+      %td.name
+        =menu.name
+
+      %td.image   
+        = link_to "#{image_tag(menu.picture.thumb.url, :class => "td_image")}".html_safe, edit_menu_path(menu), remote: true   
+      %td.cost
+        ="%.2f" % menu.cost
+        
+      %td.delete
+        =link_to 'Delete', menu_delete_path(menu),
+
+        method: :get, remote: true, class: "btn btn-danger btn-block"
+
+%tr
+  %a{name: "newcourse#{course_type.id}"}
+  %td{colspan: '4'}
+   
+    .input_form
+      -if @menu.errors.blank? && @menu.course_type_id != nil
+        -menu_item = Menu.new
+      -else
+        -menu_item = @menu
+
+      =simple_form_for menu_item, url: menus_path(menu_item, :anchor => "newcourse#{course_type.id}"), 
+                                                     html: {id: "newmenu#{course_type.id}"},
+                                                     remote: true                               do |menu|
+
+        %div{id: "alert#{course_type.id}"}
+          %div{id: "error_explanation#{course_type.id}"}        
+          %ul.errors{id: "ulerrors#{course_type.id}"}         
+
+        =menu.input :name
+        =menu.input :cost
+        =menu.input :picture, id: :idea_pictures
+        =menu.input :course_type_id, input_html: {value: course_type.id}, as: :hidden
+        =menu.input :currency_type_id, input_html: {value: @currency_id, class: "currency_id"}, as: :hidden
+        =menu.button :submit, "Create #{CourseType.find_by_id(course_type.id).name} menu item."

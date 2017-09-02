@@ -1,0 +1,34 @@
+#update-modal
+  .modal-dialog.update-modal
+    .modal-content.update-modal
+      .modal-header.update-modal
+        %h3 Update Menu Item  
+
+      .modal-body  
+
+        =simple_form_for @menu,html: {id: "newmenu"}, remote: true do |menu|
+          %div{id: "alert"}
+            %div{id: "error_explanation"}        
+            %ul.errors{id: "ulerrors"}         
+
+          =menu.input :name
+          =menu.input :cost
+          .control-group
+            .attach-set
+              =menu.input :picture, input_html: { hidden: true }
+              .input-append
+                %input#file-display.input-large.uneditable-input{type: "text"}
+                %a#upload-btn.btn
+                  %i.icon-upload-alt Browse
+
+
+          =image_tag(@menu.picture.url, width: 500)
+          /=menu.simple_fields_for :picture do |af| 
+          /=af.input :file, as: :file
+        
+          /=menu.button :submit, 'Upload File', class: 'btn btn-mini btn-success hidden', id: 'submit-file-upload' 
+
+
+          .modal-footer
+            =menu.button :submit, "Update Menu Item ", class: "btn btn-danger" 
+            =menu.button :button, "Cancel", class: "btn btn-default", data: { dismiss: "modal" }

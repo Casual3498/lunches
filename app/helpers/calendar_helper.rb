@@ -6,6 +6,7 @@ module CalendarHelper
       :holidays => [],
       :weekdays => []
     }
+
     options = defaults.merge options
 
     Calendar.new(self, date, options , block).table

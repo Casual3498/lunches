@@ -1,0 +1,6 @@
+#currency 
+  %b Choose your currency:&nbsp
+  %select#currency_select{onchange: "changedCurrency(this);"}
+    -@currency_type.each do |ct|
+      %option{value: ct.id}
+        =ct.name  

@@ -1,0 +1,17 @@
+.modal-dialog.delete-modal
+  .modal-content.delete-modal
+    .modal-header.delete-modal
+      %h3 Delete Menu Item
+  
+    .modal-body
+      %ul.errors
+      Are you sure you wish to delete 
+      %b
+        =@menu.name
+      =@menu.cost
+      =@menu.currency_type.name
+      ?
+        
+    .modal-footer
+      = link_to "Yes, Delete This Menu Item", menu_path(@menu), method: :delete, remote: true, class: "btn btn-danger"
+      = link_to "No, Please Don't", "#", class: "btn btn-default", data: { dismiss: "modal" } 
