@@ -1,0 +1,105 @@
+class OrdersController < ApplicationController
+
+
+
+  def index
+    
+    if params[:date]
+      @date = Date.parse(params[:date])  
+      @course_type = CourseType.all
+      @orders = Menu.select("menus.*", "orders.menu_id").joins("LEFT JOIN orders ON menus.id = orders.menu_id and orders.user_id='#{current_user.id}' ").where("menu_date='#{@date}' ").order(:name)
+      @currency_id =  @orders.first ? @orders.first.currency_type_id : CurrencyType.first.id
+      @currency_name = CurrencyType.find_by_id(@currency_id).name
+      @order_exist = false
+   
+      @orders.each do |order|
+        if order.menu_id
+          @order_exists = true
+          break
+        end
+      end
+
+      @orders_by_course_type = @orders.group_by(&:course_type_id)
+      
+      @order = Order.new
+
+    else #if not fom js
+      redirect_to(root_url)
+    end
+
+  end
+
+  def all_index
+    
+    @options = {holidays: [], weekdays: []}
+    @date = params[:date] ? Date.parse(params[:date]) : Date.today
+    @all_orders = Order.all.where("order_date='#{@date}' ").order(:user_id, :course_type_id)
+    currency_id =  @all_orders.first ? @all_orders.first.menu.currency_type_id : CurrencyType.first.id
+    @currency_name = CurrencyType.find_by_id(currency_id).name
+    @all_sum = 0.00
+    if @all_orders.count > 0
+      sum = Order.select("sum(menus.cost) as all_sum").joins("JOIN menus on orders.menu_id = menus.id").where("order_date='#{@date}' ").order("all_sum")
+      @all_sum = sum.first.all_sum
+    end
+
+    
+    @users = User.all.sort
+    @all_orders_by_user_id = @all_orders.group_by(&:user_id)
+
+    render 'all_index'
+  end
+
+  def create
+    empty = true #for check that order is not empty
+    temp_date = nil #for check that all order items on same date
+    Order.transaction do
+      course_type = CourseType.all
+      course_type.each do |ct| 
+        menu_item = params["order_item#{ct.id}"]
+        if menu_item != nil
+          empty = false
+          @order_item = Order.new
+          @order_item.menu_id = menu_item
+          @order_item.course_type_id = ct.id
+          @order_item.user_id = current_user.id
+          @order_item.order_date = params[:order][:order_date]
+
+          #check that order_date is equal of all order_items
+          if temp_date 
+            if temp_date != @order_item.order_date
+              @order_item.errors.add(:base, :invalid, message: "All order items must be on same date")
+              raise ActiveRecord::Rollback
+              break
+            end
+          else
+            temp_date = @order_item.order_date
+          end
+
+          if !@order_item.save         
+            raise ActiveRecord::Rollback
+            break
+          end
+
+        end
+      end  
+    end
+
+    if empty 
+      @order_item = Order.new
+      @order_item.errors.add(:base, :blank, message: "Order cannot be blank")
+    end
+
+    respond_to do |format|
+      format.js
+    end 
+
+  end
+
+  def show
+    @menu_item = Menu.find(params[:id])
+    respond_to do |format|
+      format.js
+    end 
+  end
+
+end

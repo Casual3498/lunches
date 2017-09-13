@@ -1,0 +1,36 @@
+#index-modal
+  .modal-dialog.index-modal
+    .modal-content.index-modal
+      =simple_form_for @order, remote: true do |order|  
+        .modal-header.index-modal
+          .row
+            .col-xs-12        
+              .panel
+                .panel-heading.panel-info
+                  %h1 Order on #{@date}
+                .panel-body
+                  #order                                         
+                    -@course_type.each do |ct| 
+                      .table-responsive
+                        %table.table.table-bordered
+                          %thead
+                            %tr
+                              %th.checked
+                                .fa.fa-check-circle-o
+                              %th.name 
+                                =ct.name      
+                              %th.image image
+                              %th.cost 
+                                cost (#{@currency_name})
+
+                          %tbody{id: "order-index#{ct.id}"} 
+                            =render 'index_body', course_type: ct
+        
+        .modal-footer.index-modal
+          -if !@order_exists && (@date == Date.today)
+            %div{id: "alert_create_order"}
+              %div{id: "error_explanation_create_order"}        
+              %ul.errors{id: "ulerrors_create_order"}     
+            =order.input :order_date, input_html: {value: @date}, as: :hidden
+            =order.button :submit, "Create Order ", class: "btn btn-danger" 
+          =link_to "Close", "#", class: "btn btn-default", data: { dismiss: "modal" }

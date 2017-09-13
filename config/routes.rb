@@ -1,6 +1,5 @@
 Rails.application.routes.draw do
 
-#Lunches::Application.routes.draw do
 
   root 'static_pages#home'
 
@@ -29,4 +28,14 @@ Rails.application.routes.draw do
     get "delete"
   end
 
+  get '/orders/:id', to: 'orders#show', as: :order
+
+  get '/orders', to: 'orders#index'
+
+  post '/orders', to: 'orders#create'
+
+  get '/all_orders', to: 'orders#all_index'
+
+
+  
 end

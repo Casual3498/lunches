@@ -1,0 +1,16 @@
+-if @orders_by_course_type[course_type.id]
+  -@orders_by_course_type[course_type.id].each do |menu|
+    %tr.menu_row
+      %td.checked 
+        %label
+          %input{type: "radio", name: "order_item#{course_type.id}", value: "#{menu.id}", checked: menu.menu_id, disabled:  @order_exists || (@date != Date.today) }
+      %td.name
+        =menu.name
+
+      %td.image
+        =link_to "#{image_tag(menu.picture.thumb.url, :class => "td_image")}".html_safe, order_path(menu), remote: true
+        .big_image
+          %div{id: "big-image#{menu.id}"}
+
+      %td.cost
+        ="%.2f" % menu.cost

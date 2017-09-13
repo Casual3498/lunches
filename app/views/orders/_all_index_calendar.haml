@@ -1,0 +1,17 @@
+.row
+  .col-xs-12
+    .panel
+      .panel-heading.panel-info
+        %h1 Orders
+      .panel-body
+        #menus
+          #week
+            = link_to date: @date.prev_week do
+              %i.fa.fa-angle-double-left
+            %i.fa.fa-calendar{'aria-hidden'=>"true"}
+            = text_of_week(@date)
+            = link_to date: @date.next_week do
+              %i.fa.fa-angle-double-right    
+          .table-responsive              
+            = calendar(@date, @options)  do |date| 
+              = link_to date.day, all_orders_path(date: date), remote: true 

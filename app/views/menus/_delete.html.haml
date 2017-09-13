@@ -4,14 +4,15 @@
       %h3 Delete Menu Item
   
     .modal-body
-      %ul.errors
       Are you sure you wish to delete 
       %b
         =@menu.name
       =@menu.cost
       =@menu.currency_type.name
       ?
-        
+      %div{id: "alert_delete"}
+        %div{id: "error_explanation_delete"}        
+        %ul.errors{id: "ulerrors_delete"}         
     .modal-footer
       = link_to "Yes, Delete This Menu Item", menu_path(@menu), method: :delete, remote: true, class: "btn btn-danger"
       = link_to "No, Please Don't", "#", class: "btn btn-default", data: { dismiss: "modal" } 

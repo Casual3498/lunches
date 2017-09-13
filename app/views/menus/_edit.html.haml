@@ -7,26 +7,18 @@
       .modal-body  
 
         =simple_form_for @menu,html: {id: "newmenu"}, remote: true do |menu|
-          %div{id: "alert"}
-            %div{id: "error_explanation"}        
-            %ul.errors{id: "ulerrors"}         
+          %div{id: "alert_update"}
+            %div{id: "error_explanation_update"}        
+            %ul.errors{id: "ulerrors_update"}         
 
           =menu.input :name
           =menu.input :cost
-          .control-group
-            .attach-set
-              =menu.input :picture, input_html: { hidden: true }
-              .input-append
-                %input#file-display.input-large.uneditable-input{type: "text"}
-                %a#upload-btn.btn
-                  %i.icon-upload-alt Browse
+          =menu.input :picture, input_html: { hidden: true }
+
 
 
           =image_tag(@menu.picture.url, width: 500)
-          /=menu.simple_fields_for :picture do |af| 
-          /=af.input :file, as: :file
-        
-          /=menu.button :submit, 'Upload File', class: 'btn btn-mini btn-success hidden', id: 'submit-file-upload' 
+
 
 
           .modal-footer

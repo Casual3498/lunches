@@ -1,1 +1,3 @@
-=render "save", menu: @menu, action: :create
+=render "save", menu: @menu, action_name: :create
+-if @menu.errors.blank?
+  disableCurrencySelect();

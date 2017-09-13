@@ -1,1 +1,4 @@
-=render "save"
+=render "save", menu: @menu, action_name: :delete
+-if @menu.errors.blank?
+  disableCurrencySelect();
+  $("#menu-modal").modal("hide");

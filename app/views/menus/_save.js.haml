@@ -1,12 +1,18 @@
--menu_course_type_id = (action == :update) ? nil : menu.course_type_id
+
+-menu_course_type_id = (action_name == :create ) ? menu.course_type_id : "_#{action_name}"
 $("#error_explanation#{menu_course_type_id}").html("")
 $("#ulerrors#{menu_course_type_id}").html("")
 -if menu && menu.errors.any?
   $("#alert#{menu_course_type_id}").addClass("alert alert-danger") 
   $("#error_explanation#{menu_course_type_id}").append("The form contains #{pluralize(menu.errors.count, 'error')}.")
-  -@menu.errors.full_messages.each do |message|
-    $("#ulerrors#{menu_course_type_id}").append($(" <li />").html('#{message.html_safe}'))
+  
+  -menu.errors.full_messages.each do |message|
+    $("#ulerrors#{menu_course_type_id}").append($(" <li />").html("#{message.html_safe}"))
 
 -else
+ 
   $("#alert#{menu_course_type_id}").removeClass("alert alert-danger") 
-  $("#menu-index#{menu.course_type_id}").html("#{escape_javascript(render 'index', course_type: CourseType.find_by_id(menu.course_type_id))}")
+  -if (action_name != :create_order)
+    $("#menu-index#{menu.course_type_id}").html("#{escape_javascript(render 'index', course_type: CourseType.find_by_id(menu.course_type_id))}")
+  -else
+    $('#order-modal').modal('hide');

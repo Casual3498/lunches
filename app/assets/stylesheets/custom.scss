@@ -26,7 +26,6 @@ $all-width: 100%;
 $column-count: 7;
 
 
-
 @mixin box_sizing {
   -moz-box-sizing:    border-box;
   -webkit-box-sizing: border-box;
@@ -269,7 +268,13 @@ h5{
     &.name {
       width: 65%;
     }
+    &.name_order{
+      width: 75%;
+    }
     &.image {
+      width: 10%;
+    }
+    &.image_order{
       width: 10%;
     }
     &.cost {
@@ -277,6 +282,9 @@ h5{
       text-align: right;
       padding-right: 5%; 
 
+    }
+    &.cost_order{
+      width: 15%;
     }
 
     &.delete {
@@ -296,6 +304,61 @@ h5{
         width: 100%;
         cursor:pointer;
       }
+      
+    }
+    &.cost {
+      text-align: right;
+      padding-right: 5%;
+    }
+    &.delete {
+      text-align: center;
+      a {
+
+      }
+    }    
+  }  
+}
+
+#order .table {
+  width: 100%;
+  table-layout: fixed;
+  th {
+    background: $gray-medium-light;
+    color: $gray;
+    text-align: center;
+
+    &.checked{
+      width:5%
+    }
+    &.name{
+      width: 45%;
+    }
+    &.image {
+      width: 20%;
+    }
+
+    &.cost {
+      width: 30%;
+      text-align: right;
+      padding-right: 5%; 
+
+    }
+        
+  }
+  td {
+    
+    vertical-align: middle; 
+
+    &.name {
+      text-align: left;
+    }
+    &.image {
+      .td_image{
+ 
+        width: 100%;
+        //cursor:pointer;
+      }
+  
       
     }
     &.cost {
@@ -361,4 +424,72 @@ h5{
   }
 }
 
+.big_image{
+    display:none;
+    margin-left:50px;
 
+    -moz-box-shadow:0 5px 5px rgba(0,0,0,0.3);
+    -webkit-box-shadow:0 5px 5px rgba(0,0,0,0.3);
+    box-shadow:0 5px 5px rgba(0,0,0,0.3);
+}
+td.image:hover .big_image{
+    display:block;
+    position:absolute;
+}
+
+#orders .table {
+  width: 100%;
+  table-layout: fixed;
+  th {
+    background: $gray-medium-light;
+    color: $gray;
+    text-align: center;
+
+    &.user_name{
+      width:25%
+    }
+    &.course_type{
+      width:15%
+    }
+    &.name{
+      width: 40%;
+    }
+
+    &.cost {
+      width: 20%;
+      text-align: right;
+      padding-right: 5%; 
+
+    }
+        
+  }
+  td {
+    
+    vertical-align: middle; 
+
+    &.name {
+      text-align: left;
+    }
+
+  
+    &.cost {
+      text-align: right;
+      padding-right: 5%;
+    }   
+  }  
+  tr.empty_row{
+    background: $gray-medium-light;  
+  }
+  tr.sum_row{
+    td.total{
+      text-align: right;
+      padding-right: 5%;
+      font-weight: bold;
+    }
+    td.all_sum{
+      text-align: right;
+      padding-right: 5%;
+      font-weight: bold;
+    }
+  }
+}

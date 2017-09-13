@@ -1,0 +1,18 @@
+-@users.each do |user|
+  -if @all_orders_by_user_id[user.id]
+    -temp_row = 1
+    -@all_orders_by_user_id[user.id].each do |order|
+      %tr.order_row
+        -if temp_row == 1
+          %td.user_name{rowspan: "#{@all_orders_by_user_id[user.id].count}"} 
+            =order.user.name
+        %td.course_type
+          =order.course_type.name
+        %td.name
+          =order.menu.name
+
+        %td.cost
+          ="%.2f" % order.menu.cost
+        -temp_row += 1
+    %tr.empty_row
+      %td{colspan: '4'}

@@ -12,7 +12,15 @@ end
 class DateValidator < ActiveModel::Validator
   def validate(record)
     if record.menu_date != Date.today
-      record.errors[:base] << "You can add\\edit menu item only for today (\"#{Date.today}\" ) not for \"#{record.menu_date}\" "
+      record.errors[:base] << "You can add/edit menu item only for today (\'#{Date.today}\' ) not for \'#{record.menu_date}\' "
+    end
+  end
+end
+
+class OrderExistsValidator < ActiveModel::Validator
+  def validate(record)
+    if Order.find_by menu_id: record.id
+      record.errors[:base] << "You can not change the name/cost of menu item because there is an order that includes this item."
     end
   end
 end
@@ -30,7 +38,5 @@ class Menu < ApplicationRecord
                     numericality: {:greater_than_or_equal => 0, :less_than_or_equal => 99999999.99}
   validates_with CurrencyValidator, fields: [:currency_type_id, :menu_date]
   validates_with DateValidator, fields: [:menu_date]
-
+  validates_with OrderExistsValidator, fields: [:name, :cost]
 end
-
-

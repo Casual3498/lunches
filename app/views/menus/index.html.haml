@@ -1,5 +1,4 @@
-/ :javascript 
-/   $(document).ready(changeErrorColor)
+
 :javascript 
   $(document).ready(disableCurrencySelect)
 
@@ -19,7 +18,8 @@
               %i.fa.fa-angle-double-right    
           .table-responsive              
             = calendar(@date, @options)  do |date| 
-              = date.day
+              = link_to date.day, orders_path(date: date), remote: true 
+              //= date.day
 
     -if current_user.is_lunches_admin?                  
       .panel.cur-menu
@@ -49,3 +49,4 @@
             
 
 #menu-modal.modal.fade
+#order-modal.modal.fade

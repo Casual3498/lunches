@@ -1,0 +1,23 @@
+.row
+  .col-xs-12        
+    .panel
+      .panel-heading.panel-info
+        %h1 Orders on #{@date}
+      .panel-body
+        #orders                                         
+          .table-responsive
+            %table.table.table-bordered
+              %thead
+                %tr
+                  %th.user_name user name
+                  %th.course_type course type
+                  %th.name name
+                  %th.cost cost (#{@currency_name})
+
+              %tbody
+                =render 'all_index_body'
+                %tr.sum_row
+                  %td.total{colspan:3}
+                    total:
+                  %td.all_sum
+                    ="%.2f" % @all_sum
