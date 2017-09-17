@@ -18,17 +18,6 @@ function changedCurrency(sel){
 
 }
 
-// function changeErrorColor(){
-//   var elems_for_change_error_color = document.getElementsByClassName('not_my_error_input');
-//   for (var i = 0; i < elems_for_change_error_color.length; i++) {
-//     elems_for_change_error_color[i].style.borderColor="gray"; 
-//   }
-//   elems_for_change_error_color = document.getElementsByClassName('not_my_error_label');
-//   for (var i = 0; i < elems_for_change_error_color.length; i++) {
-//     elems_for_change_error_color[i].style.color="black"; 
-//   }
-
-// }
 
 function disableCurrencySelect(){
   var elem = document.getElementById('currency');

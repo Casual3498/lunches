@@ -56,7 +56,6 @@ class MenusController < ApplicationController
 
     #Confirms an admin user
     def admin_user
-
       if (!current_user.is_lunches_admin?)  
         flash[:alert] = "You not allowed to edit menu."
         redirect_to(root_url)

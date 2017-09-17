@@ -8,4 +8,7 @@ class User < ApplicationRecord
   def is_lunches_admin?
     self == User.first
   end
+
+
+
 end

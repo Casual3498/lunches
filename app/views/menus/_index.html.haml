@@ -11,10 +11,7 @@
         ="%.2f" % menu.cost
         
       %td.delete
-        =link_to 'Delete', menu_delete_path(menu),
-
-        method: :get, remote: true, class: "btn btn-danger btn-block"
-
+        =link_to 'Delete', menu_delete_path(menu), method: :get, remote: true, class: "btn btn-danger btn-block"
 %tr
   %a{name: "newcourse#{course_type.id}"}
   %td{colspan: '4'}

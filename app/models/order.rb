@@ -18,4 +18,5 @@ class Order < ApplicationRecord
   validates :course_type_id, presence: true, uniqueness: { scope: [:user_id,:order_date],
                                                                         message: "should used once per date" } 
   validates_with OrderDateValidator, fields: [:order_date]
+
 end

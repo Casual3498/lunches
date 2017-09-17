@@ -1,9 +1,9 @@
 class OrdersController < ApplicationController
-
+  before_action :permit_user, only: [:all_index]
 
 
   def index
-    
+
     if params[:date]
       @date = Date.parse(params[:date])  
       @course_type = CourseType.all
@@ -33,20 +33,61 @@ class OrdersController < ApplicationController
     
     @options = {holidays: [], weekdays: []}
     @date = params[:date] ? Date.parse(params[:date]) : Date.today
-    @all_orders = Order.all.where("order_date='#{@date}' ").order(:user_id, :course_type_id)
+    @all_orders = Order.includes(:user).where("order_date='#{@date}' ").order(:user_id, :course_type_id)
     currency_id =  @all_orders.first ? @all_orders.first.menu.currency_type_id : CurrencyType.first.id
     @currency_name = CurrencyType.find_by_id(currency_id).name
     @all_sum = 0.00
-    if @all_orders.count > 0
+    if @all_orders.size > 0
       sum = Order.select("sum(menus.cost) as all_sum").joins("JOIN menus on orders.menu_id = menus.id").where("order_date='#{@date}' ").order("all_sum")
       @all_sum = sum.first.all_sum
     end
 
     
     @users = User.all.sort
+
     @all_orders_by_user_id = @all_orders.group_by(&:user_id)
 
-    render 'all_index'
+
+    respond_to do |format|
+      format.html {render 'all_index'}
+      format.json { 
+
+          json_orders = []
+          i=0 #array of users
+          @users.each do |user|
+            if @all_orders_by_user_id[user.id]
+              j=0 #array of order items
+              @all_orders_by_user_id[user.id].each do |order|
+                if j == 0 
+                  json_orders[i] = {}
+                  json_orders[i]["user_name"] = user.name
+                  json_orders[i]["orders"] = []
+                end
+                json_orders[i]["orders"][j]={}
+                json_orders[i]["orders"][j]["#{order.course_type.name}"] = order.menu.name
+                json_orders[i]["orders"][j]["cost"] = order.menu.cost
+                j += 1
+              end
+              i += 1
+            end
+          end
+
+          json_api_data = {}
+          
+          if @all_orders.size > 0
+            json_api_data["data"] = {}
+            json_api_data["data"]["order_date"] = @date
+            json_api_data["data"]["all_orders"] = json_orders
+          else
+            json_api_data["data"] = nil
+          end
+
+          render json: json_api_data, status: 200
+
+
+      }
+      format.js
+    end
   end
 
   def create
@@ -100,6 +141,19 @@ class OrdersController < ApplicationController
     respond_to do |format|
       format.js
     end 
+  end
+
+  private
+
+    #Confirms that permit user
+  def permit_user
+    if (!current_user.is_lunches_admin?) 
+      flash[:alert] = "You not allowed to see all orders."
+      respond_to do |format| 
+        format.html {redirect_to(root_url)}
+        format.json {render json: {errors: [{status:403, title:'Forbidden'}]}}
+      end
+    end
   end
 
 end

@@ -19,7 +19,6 @@
           .table-responsive              
             = calendar(@date, @options)  do |date| 
               = link_to date.day, orders_path(date: date), remote: true 
-              //= date.day
 
     -if current_user.is_lunches_admin?                  
       .panel.cur-menu
