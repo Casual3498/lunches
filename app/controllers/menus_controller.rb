@@ -4,7 +4,6 @@ class MenusController < ApplicationController
 
 
   def index
-    byebug
     set_variables_for_index
     @menu = Menu.new
   end
