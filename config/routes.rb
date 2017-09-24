@@ -27,6 +27,9 @@ Rails.application.routes.draw do
 
   get '/all_orders', to: 'orders#all_index'
 
-
+  namespace :v1 do
+    get '/orders', to: 'orders#index'
+    resources :sessions, only: [:create, :destroy]
+  end
   
 end

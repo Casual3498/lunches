@@ -24,16 +24,15 @@ gem 'mini_magick'
 gem 'haml'
 
 
-
 gem 'font-awesome-sass', '~> 4.7.0'
 #button for mobile
 gem 'jquery-rails'
 
 #calendar
 gem 'momentjs-rails', '>= 2.9.0'
-#gem 'bootstrap3-datetimepicker-rails', '~> 4.14.30'
-#gem 'calendar_helper', '~> 0.2.6'
 
+#secure api
+gem 'simple_token_authentication', '~> 1.0' # see semver.org
 
 # Use Puma as the app server
 gem 'puma', '~> 3.7'

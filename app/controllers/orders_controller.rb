@@ -30,7 +30,7 @@ class OrdersController < ApplicationController
   end
 
   def all_index
-    
+
     @options = {holidays: [], weekdays: []}
     @date = params[:date] ? Date.parse(params[:date]) : Date.today
     @all_orders = Order.includes(:user).where("order_date='#{@date}' ").order(:user_id, :course_type_id)
@@ -50,42 +50,7 @@ class OrdersController < ApplicationController
 
     respond_to do |format|
       format.html {render 'all_index'}
-      format.json { 
-
-          json_orders = []
-          i=0 #array of users
-          @users.each do |user|
-            if @all_orders_by_user_id[user.id]
-              j=0 #array of order items
-              @all_orders_by_user_id[user.id].each do |order|
-                if j == 0 
-                  json_orders[i] = {}
-                  json_orders[i]["user_name"] = user.name
-                  json_orders[i]["orders"] = []
-                end
-                json_orders[i]["orders"][j]={}
-                json_orders[i]["orders"][j]["#{order.course_type.name}"] = order.menu.name
-                json_orders[i]["orders"][j]["cost"] = order.menu.cost
-                j += 1
-              end
-              i += 1
-            end
-          end
-
-          json_api_data = {}
-          
-          if @all_orders.size > 0
-            json_api_data["data"] = {}
-            json_api_data["data"]["order_date"] = @date
-            json_api_data["data"]["all_orders"] = json_orders
-          else
-            json_api_data["data"] = nil
-          end
-
-          render json: json_api_data, status: 200
-
-
-      }
+ 
       format.js
     end
   end
@@ -151,7 +116,6 @@ class OrdersController < ApplicationController
       flash[:alert] = "You not allowed to see all orders."
       respond_to do |format| 
         format.html {redirect_to(root_url)}
-        format.json {render json: {errors: [{status:403, title:'Forbidden'}]}}
       end
     end
   end
