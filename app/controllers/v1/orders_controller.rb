@@ -53,7 +53,7 @@ respond_to :json
 
     json_api_data = {}
     
-    if all_orders.size > 0
+    #if all_orders.size > 0
       json_api_data["data"] = {}
       json_api_data["data"]["id"] = "#{organization_id}"
       json_api_data["data"]["type"] = "order"
@@ -62,9 +62,9 @@ respond_to :json
       json_api_data["data"]["attributes"]["total"] = all_sum
       json_api_data["data"]["attributes"]["currency"] = currency_name
       json_api_data["data"]["attributes"]["detailed_orders"] = json_orders
-    else
-      json_api_data["data"] = []
-    end
+    #else
+    #  json_api_data["data"] = []
+    #end
 
     render json: json_api_data, status: :ok, content_type: "application/vnd.api+json"
 
