@@ -1,6 +1,6 @@
 class V1::OrdersController < ApplicationController
 skip_before_action :authenticate_user! 
-acts_as_token_authentication_handler_for User  
+acts_as_token_authentication_handler_for User, fallback_to_devise: false  
 
 
 respond_to :json
