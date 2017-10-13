@@ -8,6 +8,7 @@ respond_to :json
 
 
   def index
+    puts "============================index============================================="
     organization_id = 1 #for jsonapi 
     begin_time = "10:00am" #which can request the order for today through our API at a specific time
     if Time.now < begin_time   
