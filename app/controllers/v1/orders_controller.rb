@@ -1,16 +1,18 @@
 class V1::OrdersController < ApplicationController
-  skip_before_action :authenticate_user!
-  before_action :authenticate_user_from_token!
+#protect_from_forgery prepend: true
+acts_as_token_authentication_handler_for User  
+skip_before_action :authenticate_user! 
+#protect_from_forgery with: :null_session, prepend: true
+respond_to :json
+
+
 
   def index
-    begin_time = "10:00am"
-    if Time.now < begin_time
-      errors = {}
-      errors["errors"] = []
-      errors["errors"][0] = {}
-      errors["errors"][0]["detail"] = "You not allowed to get order list before #{begin_time}"     
+    organization_id = 1 #for jsonapi 
+    begin_time = "10:00am" #which can request the order for today through our API at a specific time
+    if Time.now < begin_time   
 
-      render json: errors, status: 404, content_type: "application/vnd.api+json"
+      render json: errors_json("You not allowed to get orders list before #{begin_time}"), status: :not_acceptable, content_type: "application/vnd.api+json"
       return
     end
 
@@ -53,37 +55,20 @@ class V1::OrdersController < ApplicationController
     
     if all_orders.size > 0
       json_api_data["data"] = {}
-      json_api_data["data"]["id"] = "1"
+      json_api_data["data"]["id"] = "#{organization_id}"
       json_api_data["data"]["type"] = "order"
-      json_api_data["data"]["meta"] = {}
-      json_api_data["data"]["meta"]["order_date"] = date
-      json_api_data["data"]["meta"]["total"] = all_sum
-      json_api_data["data"]["meta"]["currency"] = currency_name
-      json_api_data["data"]["meta"]["detailed_orders"] = json_orders
+      json_api_data["data"]["attributes"] = {}
+      json_api_data["data"]["attributes"]["order_date"] = date
+      json_api_data["data"]["attributes"]["total"] = all_sum
+      json_api_data["data"]["attributes"]["currency"] = currency_name
+      json_api_data["data"]["attributes"]["detailed_orders"] = json_orders
     else
-      json_api_data["data"] = nil
+      json_api_data["data"] = []
     end
 
     render json: json_api_data, status: :ok, content_type: "application/vnd.api+json"
 
-
-
-
   end
 
-
-  private
-  
-  def authenticate_user_from_token!
-    user_email = params[:email].presence
-    user       = user_email && User.find_by_email(user_email)
-    # Notice how we use Devise.secure_compare to compare the token
-    # in the database with the token given in the params, mitigating
-    # timing attacks.
-    if user && Devise.secure_compare(user.authentication_token, params[:authentication_token])
-      sign_in user, store: false
-      
-    end
-  end
 
 end

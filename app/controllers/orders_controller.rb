@@ -1,13 +1,15 @@
 class OrdersController < ApplicationController
+  #skip_before_action :authenticate_user_from_token!
+
   before_action :permit_user, only: [:all_index]
 
 
   def index
 
-    if params[:date]
-      @date = Date.parse(params[:date])  
+    if params[:order_date]
+      @order_date = Date.parse(params[:order_date])  
       @course_type = CourseType.all
-      @orders = Menu.select("menus.*", "orders.menu_id").joins("LEFT JOIN orders ON menus.id = orders.menu_id and orders.user_id='#{current_user.id}' ").where("menu_date='#{@date}' ").order(:name)
+      @orders = Menu.select("menus.*", "orders.menu_id").joins("LEFT JOIN orders ON menus.id = orders.menu_id and orders.user_id='#{current_user.id}' ").where("menu_date='#{@order_date}' ").order(:name)
       @currency_id =  @orders.first ? @orders.first.currency_type_id : CurrencyType.first.id
       @currency_name = CurrencyType.find_by_id(@currency_id).name
       @order_exist = false
@@ -33,12 +35,13 @@ class OrdersController < ApplicationController
 
     @options = {holidays: [], weekdays: []}
     @date = params[:date] ? Date.parse(params[:date]) : Date.today
-    @all_orders = Order.includes(:user).where("order_date='#{@date}' ").order(:user_id, :course_type_id)
+    @order_date = params[:order_date] ? Date.parse(params[:order_date]) : Date.today
+    @all_orders = Order.includes(:user).where("order_date='#{@order_date}' ").order(:user_id, :course_type_id)
     currency_id =  @all_orders.first ? @all_orders.first.menu.currency_type_id : CurrencyType.first.id
     @currency_name = CurrencyType.find_by_id(currency_id).name
     @all_sum = 0.00
     if @all_orders.size > 0
-      sum = Order.select("sum(menus.cost) as all_sum").joins("JOIN menus on orders.menu_id = menus.id").where("order_date='#{@date}' ").order("all_sum")
+      sum = Order.select("sum(menus.cost) as all_sum").joins("JOIN menus on orders.menu_id = menus.id").where("order_date='#{@order_date}' ").order("all_sum")
       @all_sum = sum.first.all_sum
     end
 

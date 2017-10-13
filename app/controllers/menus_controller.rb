@@ -1,4 +1,6 @@
 class MenusController < ApplicationController
+  #skip_before_action :authenticate_user_from_token!
+  
   before_action :set_menu, only: [:destroy, :edit, :update]
   before_action :admin_user, only: [:new, :create, :destroy, :edit, :update]
 
@@ -81,6 +83,10 @@ class MenusController < ApplicationController
         @menu.errors.add(:base, :invalid, message: "You can not delete the menu item because there is an order that includes this item.")
         return false
       end
+      if @menu.menu_date != Date.today
+        @menu.errors.add(:base, :invalid, message: "You can not delete the menu item because this item not from today menu.")
+        return false
+      end        
       true
     end
 

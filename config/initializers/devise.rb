@@ -277,5 +277,5 @@ Devise.setup do |config|
 
 
 #for   rake assets:precompile RAILS_ENV=production
-  config.secret_key = '5c96d246206b2f9e0e46d13d1658019ac2d273c372237f1afc7a59d99d65bafad3d04ce4d4b6e6d1eab05e8730c76e8980b6ed684f7065d9ddb2679e4403f5df'
+  #config.secret_key = '5c96d246206b2f9e0e46d13d1658019ac2d273c372237f1afc7a59d99d65bafad3d04ce4d4b6e6d1eab05e8730c76e8980b6ed684f7065d9ddb2679e4403f5df'
 end

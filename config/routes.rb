@@ -9,7 +9,7 @@ Rails.application.routes.draw do
 
   get '/conditions_of_use', to: 'static_pages#conditions_of_use'
 
-  devise_for :users
+  devise_for :users #, :controllers => {sessions: 'v1/sessions'}
 
   get '/users', to: 'users#index' 
 
@@ -28,8 +28,11 @@ Rails.application.routes.draw do
   get '/all_orders', to: 'orders#all_index'
 
   namespace :v1 do
+    devise_scope :user do
+      post '/login', to: 'sessions#create'
+      delete '/logout', to: 'sessions#destroy'
+    end
     get '/orders', to: 'orders#index'
-    resources :sessions, only: [:create, :destroy]
   end
   
 end

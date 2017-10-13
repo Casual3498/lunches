@@ -1,0 +1,3 @@
+#!/bin/bash
+#run home production server with ssl 
+puma -b 'ssl://127.0.0.1:3000?key=/home/serge/.ssh/server.key&cert=/home/serge/.ssh/server.crt'
