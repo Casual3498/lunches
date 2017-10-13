@@ -30,7 +30,7 @@ token=$(echo $token | grep -wo authentication_token.* | cut -d',' -f1 | cut -d':
 
 echo token = $token
 
-#read -rsp $'Press enter to continue...\n'
+read -rsp $'Press enter to continue...\n'
 
 echo 2. 'GET' $host/v1/orders.json
 
@@ -41,7 +41,7 @@ curl -s -H "Accept: application/vnd.api+json" \
         -X  GET http://localhost:3000/v1/orders.json \
      | python -mjson.tool
 
-#read -rsp $'Press enter to continue...\n'
+read -rsp $'Press enter to continue...\n'
 
 echo 3. 'DELETE' $host/v1/logout.json
 
