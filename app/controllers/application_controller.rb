@@ -1,15 +1,12 @@
 class ApplicationController < ActionController::Base
   #protect_from_forgery prepend: true
   protect_from_forgery with: :exception
-  protect_from_forgery with: :null_session #, prepend: true #, if: Proc.new { |c| c.request.format == 'application/vnd.api+json' }
-  # before_action :authenticate_user_from_token!
-  # This is Devise's authentication 
+  protect_from_forgery with: :null_session , prepend: true, if: Proc.new { |c| c.request.format == 'application/vnd.api+json' }
+
   before_action :authenticate_user! #scipped in static_pages_controller.rb and in v1::sessions_controller.rb
   before_action :configure_permitted_parameters, if: :devise_controller?
-
-  #acts_as_token_authentication_handler_for User , fallback: :none
   #acts_as_token_authentication_handler_for User , if: lambda { |controller| controller.request.format.json? }
-  #acts_as_token_authentication_handler_for User
+
 
 
   #Returns Error hash with received text
@@ -24,6 +21,7 @@ class ApplicationController < ActionController::Base
 
 
   protected
+
   def configure_permitted_parameters
     devise_parameter_sanitizer.permit(:sign_up, keys: [:name])
     devise_parameter_sanitizer.permit(:account_update, keys: [:name])
@@ -31,22 +29,10 @@ class ApplicationController < ActionController::Base
   end
 
   private
-  # def authenticate_user_from_token!
-  #   debugger
-  #   user_email = params[:email].presence
-  #   user       = user_email && User.find_by_email(user_email)
-  #   # Notice how we use Devise.secure_compare to compare the token
-  #   # in the database with the token given in the params, mitigating
-  #   # timing attacks.
-  #   if user && Devise.secure_compare(user.authentication_token, params[:authentication_token])
-  #     sign_in user, store: false
-  #   else
-  #     render  json: errors_json("Unauthorized"), status: 401, content_type: "application/vnd.api+json" 
-  #   end
+
+  # def after_successful_token_authentication
+  #   # Make the authentication token to be disposable 
+  #     current_user.authentication_token = nil
+  #     current_user.save!
   # end
-  def after_successful_token_authentication
-    #debugger
-    # Make the authentication token to be disposable 
-    #renew_authentication_token!
-  end
 end

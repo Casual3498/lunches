@@ -1,8 +1,8 @@
 class V1::OrdersController < ApplicationController
-#protect_from_forgery prepend: true
-acts_as_token_authentication_handler_for User  
 skip_before_action :authenticate_user! 
-#protect_from_forgery with: :null_session, prepend: true
+acts_as_token_authentication_handler_for User  
+
+
 respond_to :json
 
 

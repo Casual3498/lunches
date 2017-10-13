@@ -1,6 +1,5 @@
 class OrdersController < ApplicationController
-  #skip_before_action :authenticate_user_from_token!
-
+  
   before_action :permit_user, only: [:all_index]
 
 
