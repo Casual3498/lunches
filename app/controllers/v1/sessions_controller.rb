@@ -8,7 +8,7 @@ class V1::SessionsController < Devise::SessionsController
 
 
   def create
-    puts "=========================== create  SessionsController ============================================="
+
     resource = User.find_for_database_authentication(:email=>params[:data][:attributes][:email])
     return invalid_login_attempt unless resource
 

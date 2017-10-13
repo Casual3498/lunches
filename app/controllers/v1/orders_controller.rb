@@ -1,6 +1,6 @@
 class V1::OrdersController < ApplicationController
+acts_as_token_authentication_handler_for User
 skip_before_action :authenticate_user! 
-acts_as_token_authentication_handler_for User, fallback_to_devise: false  
 
 
 respond_to :json
@@ -8,7 +8,7 @@ respond_to :json
 
 
   def index
-    puts "============================index============================================="
+
     organization_id = 1 #for jsonapi 
     begin_time = "10:00am" #which can request the order for today through our API at a specific time
     if Time.now < begin_time   
@@ -19,10 +19,6 @@ respond_to :json
 
     date = params[:date] ? Date.parse(params[:date]) : Date.today
     all_orders = Order.includes(:user).where("order_date='#{date}' ").order(:user_id, :course_type_id)
-puts "========================================================================="
-puts "all_orders"
-puts "#{all_orders.size}"
-puts "========================================================================="
     currency_id =  all_orders.first ? all_orders.first.menu.currency_type_id : CurrencyType.first.id
     currency_name = CurrencyType.find_by_id(currency_id).name
     all_sum = 0.00
