@@ -5,5 +5,3 @@ Problems:
 2. heroku - red backgroung in modal window
 
 3. heroku -  table-layout:fixed;  - not worked
-
-4. heroku - api authentication token not worked

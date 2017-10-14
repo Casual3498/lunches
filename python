@@ -1,0 +1,1 @@
+result = {"data":{"id":"0","type":"auth_token","attributes":{"authentication_token":"7TzwT5tVaGs1bMtoStbW","email":"second@lunches.md"}}} -m json.tool

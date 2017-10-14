@@ -1,4 +1,5 @@
 class V1::SessionsController < Devise::SessionsController  
+include V1::JsonHelper  
   skip_before_action :verify_signed_out_user, only: :destroy
   acts_as_token_authentication_handler_for User
   
@@ -14,7 +15,7 @@ class V1::SessionsController < Devise::SessionsController
 
     if resource.valid_password?(params[:data][:attributes][:password])
       sign_in(:user, resource)
-      render json: { "data": {"id": "0", "type": "auth_token", "attributes": {"authentication_token": resource.authentication_token, "email": resource.email}}}, status: :ok, content_type: "application/vnd.api+json"
+      render json: { "data": {"id": "0", "type": "auth_token", "attributes": {"authentication_token": resource.authentication_token, "email": resource.email}}}.to_json, status: :created, content_type: "application/vnd.api+json"
       return
     end
     invalid_login_attempt
@@ -30,10 +31,9 @@ class V1::SessionsController < Devise::SessionsController
       cu.save!
       render json: { "data": {"id": "0", "type": "logout_answer", "attributes": {"success": true}}}.to_json, status: :ok, content_type: "application/vnd.api+json"
     else
-      render json: errors_json("Logout error"), status: :unprocessable_entity, content_type: "application/vnd.api+json"
+      render json: errors_json("Logout error"), status: :internal_server_error, content_type: "application/vnd.api+json"
     end  
   end 
-
 
 
 

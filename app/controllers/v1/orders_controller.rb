@@ -1,4 +1,5 @@
 class V1::OrdersController < ApplicationController
+include V1::JsonHelper
 acts_as_token_authentication_handler_for User
 skip_before_action :authenticate_user! 
 
@@ -17,7 +18,8 @@ respond_to :json
       return
     end
 
-    date = params[:date] ? Date.parse(params[:date]) : Date.today
+    #date = params[:date] ? Date.parse(params[:date]) : Date.today
+    date = Date.today
     all_orders = Order.includes(:user).where("order_date='#{date}' ").order(:user_id, :course_type_id)
     currency_id =  all_orders.first ? all_orders.first.menu.currency_type_id : CurrencyType.first.id
     currency_name = CurrencyType.find_by_id(currency_id).name

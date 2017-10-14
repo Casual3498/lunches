@@ -14,19 +14,16 @@ export password=222222
 
 echo 1. 'POST' $host/v1/login.json
 
-export token=$(
+export token=$( \
 curl -s -H "Accept: application/vnd.api+json" \
         -H "Content-Type: application/vnd.api+json" \
         -X POST $host/v1/login.json  \
-        -d '{"data": {"id": "0", "type": "auth_params", "attributes": {"email" : '"\"$email\""', "password":'"\"$password\""'}}}' \
-        | python -mjson.tool  \
+        -d '{"data": {"id": "0", "type": "auth_params", "attributes": {"email" : '"\"$email\""', "password":'"\"$password\""'}}}'       
+)
 
-  )
-
-echo result = $token  
+echo $token | python -m json.tool 
 
 token=$(echo $token | grep -wo authentication_token.* | cut -d',' -f1 | cut -d':' -f2 | sed 's/ *["\,]//g')
-
 
 echo token = $token
 
@@ -39,7 +36,7 @@ curl -s -H "Accept: application/vnd.api+json" \
         -H "X-User-Token: $token" \
         -H "X-User-Email: $email" \
         -X  GET $host/v1/orders.json \
-     | python -mjson.tool
+     | python -m json.tool
 
 #read -rsp $'Press enter to continue...\n'
 
@@ -50,7 +47,7 @@ curl -s -H "Accept: application/vnd.api+json" \
         -H "X-User-Token: $token" \
         -H "X-User-Email: $email" \
         -X  DELETE $host/v1/logout.json \
-     | python -mjson.tool
+     | python -m json.tool
 
 
 #read -rsp $'Press enter to continue...\n'
@@ -62,4 +59,4 @@ curl -s -H "Accept: application/vnd.api+json" \
         -H "X-User-Token: $token" \
         -H "X-User-Email: $email" \
         -X  GET $host/v1/orders.json \
-     | python -mjson.tool     
+     | python -m json.tool     
