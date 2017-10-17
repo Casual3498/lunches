@@ -2,5 +2,15 @@ language: ruby
 rvm:
  - 2.4.1
 
-env:
- - DB=postgresql
+services:
+  - postgresql
+
+before_script:
+  - psql -c 'create database lunches_test;' -U postgres
+
+test:
+  adapter: postgresql
+  encoding: unicode
+  database: lunches_test
+  username: serge
+  password:  
