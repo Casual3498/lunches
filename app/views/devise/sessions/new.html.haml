@@ -1,8 +1,9 @@
+-provide(:title, "Sign in")
 .row
   .col-md-offset-2.col-md-8
     .panel
       .panel-heading.panel-info
-        %h1 Log in
+        %h1 Sign in
       .panel-body
         = simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
           .form-inputs
@@ -10,6 +11,6 @@
             = f.input :password, required: false
             = f.input :remember_me, as: :boolean if devise_mapping.rememberable?
           .form-actions
-            = f.button :submit, "Log in"
+            = f.button :submit, "Sign in"
       .panel-footer
         = render "devise/shared/links"
