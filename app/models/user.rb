@@ -6,6 +6,8 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
 
+  #validates :name, presence: true
+
   def is_lunches_admin?
     self == User.first
   end

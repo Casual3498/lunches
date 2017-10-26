@@ -3,13 +3,40 @@
 %html
   %head
 
-    %meta{:charset => "utf-8"}
+    %meta{charset: "utf-8"}
     -#for mobile devices
-    %meta{:name => "viewport", :content => "width=device-width, initial-scale=1.0"}
+    %meta{name: "viewport", content: "width=device-width, initial-scale=1.0"}
 
     %title #{full_title(yield(:title))}
     =render 'layouts/rails_default'
     =render 'layouts/shim'
+
+    -#favicons
+    =favicon_link_tag
+    =favicon_link_tag 'apple-touch-icon-57x57', rel: 'apple-touch-icon-precomposed', sizes: '57x57', type: 'image/png'
+    =favicon_link_tag 'apple-touch-icon-60x60.png', rel: 'apple-touch-icon-precomposed', sizes: '60x60', type: 'image/png'
+    =favicon_link_tag 'apple-touch-icon-72x72.png', rel: 'apple-touch-icon-precomposed', sizes: '72x72', type: 'image/png'
+    =favicon_link_tag 'apple-touch-icon-76x76.png', rel: 'apple-touch-icon-precomposed', sizes: '76x76', type: 'image/png'
+    =favicon_link_tag 'apple-touch-icon-114x114.png', rel: 'apple-touch-icon-precomposed', sizes: '114x114', type: 'image/png'
+    =favicon_link_tag 'apple-touch-icon-120x120.png', rel: 'apple-touch-icon-precomposed', sizes: '120x120', type: 'image/png'
+    =favicon_link_tag 'apple-touch-icon-144x144.png', rel: 'apple-touch-icon-precomposed', sizes: '144x144', type: 'image/png'
+    =favicon_link_tag 'apple-touch-icon-152x152.png', rel: 'apple-touch-icon-precomposed', sizes: '152x152', type: 'image/png'
+
+    =favicon_link_tag 'favicon-196x196.png', rel: 'icon', sizes: '196x196', type: 'image/png'
+    =favicon_link_tag 'favicon-96x96.png', rel: 'icon', sizes: '96x96', type: 'image/png'
+    =favicon_link_tag 'favicon-32x32.png', rel: 'icon', sizes: '32x32', type: 'image/png'
+    =favicon_link_tag 'favicon-16x16.png', rel: 'icon', sizes: '16x16', type: 'image/png'
+    =favicon_link_tag 'favicon-128.png', rel: 'icon', sizes: '128x128', type: 'image/png'
+
+
+    %meta{name: "application-name", content: "&nbsp;"}
+    %meta{name: "msapplication-TileColor", content:"#ffffff"}
+    %meta{name: "msapplication-TileImage", content:"mstile-144x144.png"}
+    %meta{name: "theme-color", content:"#ffffff"}
+    %meta{name: "msapplication-square70x70logo", content: "mstile-70x70.png"}
+    %meta{name: "msapplication-square150x150logo", content: "mstile-150x150.png"}
+    %meta{name: "msapplication-wide310x150logo", content: "mstile-310x150.png"}
+    %meta{name: "msapplication-square310x310logo", content: "mstile-310x310.png"}
 
 
 

@@ -8,14 +8,15 @@ class UsersController < ApplicationController
 
   def show
     @user = User.find(params[:id])
-    flash[:success] = "Hello!"
+    #flash[:success] = "Hello!"
   end
 
 
   #Confirms the correct user.
   def correct_user
-    @user = User.find(params[:id])
-    if (current_user != @user) && (!current_user.is_lunches_admin?)  
+    @user = User.find_by_id(params[:id])
+
+    if @user == nil  || ((current_user != @user) && (!current_user.is_lunches_admin?))  
       flash[:alert] = "You not allowed to see other users profiles."
       redirect_to(root_url)
     end
