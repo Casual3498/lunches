@@ -7,6 +7,7 @@ class UsersController < ApplicationController
   end
 
   def show
+    debugger
     @user = User.find(params[:id])
     #flash[:success] = "Hello!"
   end
@@ -15,7 +16,7 @@ class UsersController < ApplicationController
   #Confirms the correct user.
   def correct_user
     @user = User.find_by_id(params[:id])
-
+debugger
     if @user == nil  || ((current_user != @user) && (!current_user.is_lunches_admin?))  
       flash[:alert] = "You not allowed to see other users profiles."
       redirect_to(root_url)
@@ -24,6 +25,7 @@ class UsersController < ApplicationController
   
   #Confirms an admin user
   def admin_user
+    debugger
     if (!current_user.is_lunches_admin?)  
       flash[:alert] = "You not allowed to see list of users."
       redirect_to(root_url)

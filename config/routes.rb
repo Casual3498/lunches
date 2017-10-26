@@ -15,7 +15,7 @@ Rails.application.routes.draw do
 
   get '/users/:id', to: 'users#show', as: :user
 
-  resources :menus, only: [:index, :new, :create] do
+  resources :menus do
     get "delete"
   end
 
