@@ -54,7 +54,6 @@ describe "StaticPages", type: :request do
     visit root_path
     click_link "Lunches"
     expect(page).to have_css 'title', text: /^#{full_title('')}$/, visible: false
-    #expect(page).to have_title(full_title(''))
   end
 
 end

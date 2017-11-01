@@ -9,7 +9,6 @@ include V1::JsonHelper
 
 
   def create
-    debugger
     resource = User.find_for_database_authentication(:email=>params[:data][:attributes][:email])
     return invalid_login_attempt unless resource
 
