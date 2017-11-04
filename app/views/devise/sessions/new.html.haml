@@ -5,7 +5,8 @@
       .panel-heading.panel-info
         %h1 Sign in
       .panel-body
-        = simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
+        =simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
+          =f.error_notification
           .form-inputs
             = f.input :email, required: false, autofocus: true
             = f.input :password, required: false

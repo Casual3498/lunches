@@ -12,6 +12,12 @@ RSpec.describe User, type: :model do
   it { should respond_to(:password) }
   it { should respond_to(:password_confirmation) } 
   it { should respond_to(:valid_password?)}
+  it { should respond_to(:rememberable_value)}
+  it { should respond_to(:remember_me)}
+  it { should respond_to(:remember_me!)}
+  it { should respond_to(:remember_me?)} 
+  it { should respond_to(:forget_me!)}
+  
 
   it { should respond_to(:authentication_token) }
 
@@ -103,7 +109,7 @@ RSpec.describe User, type: :model do
     let(:found_user) { User.find_for_database_authentication(email: @user.email) }
 
     describe "with valid password" do
-      it { should eq  found_user.valid_password?(@user.password) ? found_user : nil  }
+      it { expect(found_user.valid_password?(@user.password)).to be_truthy  }
     end
 
     describe "with invalid password" do
@@ -121,16 +127,27 @@ RSpec.describe User, type: :model do
 
 
 
-  # class PostsTest < ActionController::TestCase
-  #  include Devise::Test::ControllerHelpers
 
-  #  test 'authenticated users can GET index' do
-  #    sign_in users(:bob)
 
-  #    get :index
-  #    assert_response :success
-  #  end
+
+
+  describe "authentication token" do
+    before { @user.save }
+
+    it { expect(@user.authentication_token).not_to be_blank }
+  end
+
+
+
+
+
+
+  # RSpec.configure do |config|
+  #   config.include Devise::Test::ControllerHelpers, type: :controller
+  #   config.include Devise::Test::ControllerHelpers, type: :view
   # end
+
+
 
 
 
