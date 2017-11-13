@@ -7,6 +7,27 @@ RSpec.describe "UserPages", type: :request do
 
   subject { page }
 
+
+  describe "index" do
+    before do
+      sign_in FactoryBot.create(:user)
+      FactoryBot.create(:user, name: "Bob", email: "bob@example.com")
+      FactoryBot.create(:user, name: "Ben", email: "ben@example.com")
+      visit users_path
+    end
+
+    it { should have_title('Users') }
+    it { should have_content('Users') }
+
+    it "should list each user" do
+      User.all.each do |user|
+        expect(page).to have_selector('li', text: user.name)
+      end
+    end
+  end
+
+
+
   describe "signup page" do
     before { visit new_user_registration_path }
 
@@ -75,6 +96,47 @@ RSpec.describe "UserPages", type: :request do
   end
 
 
+  describe "edit" do
+    let(:user) { FactoryBot.create(:user) }
+    before do      
+      visit new_user_session_path
+      valid_signin(user)
+      visit edit_user_registration_path(user)
+    end
 
+    describe "page" do
+      it { should have_content("Edit User") }
+      it { should have_title("Edit User") }
+    end
+
+    describe "with invalid information" do
+      before { click_button "Update" }
+
+      it { should have_error_message('Please review the problems below:')  }
+    end
+
+    describe "with valid information" do
+      let(:new_name)  { "New Name" }
+      let(:new_email) { "new@example.com" }
+      let(:new_password) { "123456" }
+      before do
+        fill_in "Name",             with: new_name
+        fill_in "Email",            with: new_email
+        fill_in "Password",         with: new_password
+        fill_in "Password confirmation", with: new_password
+        fill_in " Current password", with: user.password
+        click_button "Update"
+      end
+
+
+      it { should have_content(new_email) }
+      it { should have_success_message( 'Your account has been updated successfully.') }      
+      it { should have_link('Sign out', href: destroy_user_session_path) }
+      specify { expect(user.reload.name).to  eq new_name }
+      specify { expect(user.reload.email).to eq new_email }
+      specify { expect(::BCrypt::Password.new("#{user.reload.encrypted_password}") ).to eq new_password }
+    end
+
+  end
 
 end

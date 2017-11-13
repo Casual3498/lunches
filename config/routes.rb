@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-
+  
 
   root 'static_pages#home'
 
@@ -9,7 +9,7 @@ Rails.application.routes.draw do
 
   get '/conditions_of_use', to: 'static_pages#conditions_of_use'
 
-  devise_for :users #, :controllers => {sessions: 'v1/sessions'}
+  devise_for :users
 
   get '/users', to: 'users#index' 
 

@@ -17,12 +17,20 @@ RSpec.describe User, type: :model do
   it { should respond_to(:remember_me!)}
   it { should respond_to(:remember_me?)} 
   it { should respond_to(:forget_me!)}
-  
-
   it { should respond_to(:authentication_token) }
+  it { should respond_to(:is_lunches_admin?)}
 
 
   it { should be_valid }
+  it { should_not be_is_lunches_admin }
+
+
+
+  describe "with saving first user becomes the lunches admin" do
+    before { @user.save }
+
+    it { should be_is_lunches_admin }
+  end
 
   describe "when name is not present" do
     before { @user.name = " " }
@@ -126,7 +134,10 @@ RSpec.describe User, type: :model do
   end
 
 
-
+ describe "with a password that's too long" do
+    before { @user.password = @user.password_confirmation = "a" * 129 }
+    it { should be_invalid }
+  end
 
 
 
@@ -136,6 +147,7 @@ RSpec.describe User, type: :model do
 
     it { expect(@user.authentication_token).not_to be_blank }
   end
+
 
 
 
