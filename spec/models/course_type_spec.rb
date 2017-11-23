@@ -31,9 +31,13 @@ RSpec.describe CourseType, type: :model do
 
 
   describe "Course type must have name with 'first course', 'main course', 'drink' values" do
-    it { expect(CourseType.where('lower(name) = ?', "first course")).to exist }
-    it { expect(CourseType.where('lower(name) = ?', "main course")).to exist }
-    it { expect(CourseType.where('lower(name) = ?', "drink")).to exist }
+    course_types = [] << 'first course' << 'main course' << 'drink'
+    course_types.each do |course_type|
+      it { expect(CourseType.where('lower(name) = ?', course_type)).to exist }
+    end
+    # it { expect(CourseType.where('lower(name) = ?', "first course")).to exist }
+    # it { expect(CourseType.where('lower(name) = ?', "main course")).to exist }
+    # it { expect(CourseType.where('lower(name) = ?', "drink")).to exist }
   end
 
 
