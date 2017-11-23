@@ -17,6 +17,11 @@ class ApplicationController < ActionController::Base
 
   private
 
+  # def after_sign_in_path_for(resource)
+  #   menus_path
+  # end
+
+
   # def after_successful_token_authentication
   #   # Make the authentication token to be disposable 
   #     current_user.authentication_token = nil

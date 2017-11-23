@@ -33,10 +33,21 @@ class Menu < ApplicationRecord
   has_many :orders, dependent: :restrict_with_exception
   validates :name, presence: true, length: {maximum: 50}, uniqueness: { scope: [:menu_date,:course_type_id],
                                                                         message: "should used once per course type" }
-  validates :cost,  presence: true, 
-                    format: { :with => /\A\d{0,8}(\.\d{0,2})?\z/ },
-                    numericality: {:greater_than_or_equal => 0, :less_than_or_equal => 99999999.99}
+  validates :cost,  presence: true
+  #numericality: {:greater_than_or_equal_to => 0.01, :less_than_or_equal_to => 99999999.99}
+  #validates_format_of :cost, :with => /(\A(\d{1,8}(\.\d{0,2})?)\z)|(\A\.\d{1,2}\z)/
+  validate :cost_format
+  COST_REGEXP = /(\A(\d{1,8}(\.\d{0,2})?)\z)|(\A\.\d{1,2}\z)/
+
   validates_with CurrencyValidator, fields: [:currency_type_id, :menu_date]
   validates_with DateValidator, fields: [:menu_date]
   validates_with OrderExistsValidator, fields: [:name, :cost]
+
+  private
+  def cost_format
+    unless read_attribute_before_type_cast('cost') =~ COST_REGEXP
+      errors.add('cost', 'must be a positive number not greater 99999999.99 with dot as decimal separator and not more than 2 digits after decimal point.')
+    end
+  end
+
 end

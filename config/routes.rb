@@ -19,6 +19,8 @@ Rails.application.routes.draw do
     get "delete"
   end
 
+  get '/menus', to: 'menus#index', as: :user_root
+
   get '/orders/:id', to: 'orders#show', as: :order
 
   get '/orders', to: 'orders#index'

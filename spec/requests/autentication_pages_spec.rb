@@ -78,7 +78,7 @@ RSpec.describe "Authentication", type: :request do
         describe "after signing in" do
 
           it "should render the desired protected page" do
-            # Rails.logger.debug "-------------------------------------"
+             #Rails.logger.debug "-------------------------------------"
             expect(page).to have_title("#{base_title} | Edit User")
           end
 
