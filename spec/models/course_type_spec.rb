@@ -23,6 +23,7 @@ RSpec.describe CourseType, type: :model do
     before do
       course_type_with_same_name = @course_type.dup
       course_type_with_same_name.name = @course_type.name.upcase
+      course_type_with_same_name.id = 4
       pp CourseType.all
       pp @course_type
       pp course_type_with_same_name
