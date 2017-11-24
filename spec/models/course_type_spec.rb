@@ -23,10 +23,7 @@ RSpec.describe CourseType, type: :model do
     before do
       course_type_with_same_name = @course_type.dup
       course_type_with_same_name.name = @course_type.name.upcase
-      course_type_with_same_name.id = 4
-      pp CourseType.all
-      pp @course_type
-      pp course_type_with_same_name
+      course_type_with_same_name.id = 4 #for travis ci (see db.seed)
       course_type_with_same_name.save
     end
 
@@ -46,9 +43,12 @@ RSpec.describe CourseType, type: :model do
 
     let! (:menu_item) { FactoryBot.create(:menu) }
 
+
     it "should not destroy course type" do
+       pp menu_item
       course_type = CourseType.find_by_id(menu_item.course_type_id)
       course_type_id = course_type.id
+      pp course_type
 
       expect do
         course_type.destroy

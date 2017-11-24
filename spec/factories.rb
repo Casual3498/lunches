@@ -16,7 +16,7 @@ FactoryBot.define do
 
   factory :course_type do
     name   "Example course"
-    id = 4 #for travis ci
+    id = 5 #for travis ci (see db.seed)
   end
 
   factory :currency_type do
