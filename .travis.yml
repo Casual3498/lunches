@@ -11,6 +11,7 @@ before_script:
   - bundle exec rake db:migrate
   - bundle exec rake db:seed
   - psql -d travis_ci_test -c 'ALTER SEQUENCE course_types_id_seq RESTART WITH 4;' 
+  - psql -d travis_ci_test -c 'ALTER SEQUENCE currency_types_id_seq RESTART WITH 4;'
 
 test:
   adapter: postgresql
