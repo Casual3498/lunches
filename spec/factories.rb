@@ -16,6 +16,7 @@ FactoryBot.define do
 
   factory :course_type do
     name   "Example course"
+    id = 4 #for travis ci
   end
 
   factory :currency_type do
