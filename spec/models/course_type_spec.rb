@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe CourseType, type: :model do
-  before { @course_type = CourseType.new(name: "Example course") }
+  before { @course_type = CourseType.new(name: "Example course type") }
 
   subject { @course_type }
 
