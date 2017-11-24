@@ -23,6 +23,7 @@ RSpec.describe CourseType, type: :model do
     before do
       course_type_with_same_name = @course_type.dup
       course_type_with_same_name.name = @course_type.name.upcase
+      pp CourseType.all
       course_type_with_same_name.save
     end
 
@@ -35,9 +36,6 @@ RSpec.describe CourseType, type: :model do
     course_types.each do |course_type|
       it { expect(CourseType.where('lower(name) = ?', course_type)).to exist }
     end
-    # it { expect(CourseType.where('lower(name) = ?', "first course")).to exist }
-    # it { expect(CourseType.where('lower(name) = ?', "main course")).to exist }
-    # it { expect(CourseType.where('lower(name) = ?', "drink")).to exist }
   end
 
 
