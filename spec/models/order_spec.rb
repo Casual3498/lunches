@@ -72,6 +72,8 @@ RSpec.describe Order, type: :model do
 
   describe "when course_type is first course, main course or drink" do
     before do
+      @orders = (Order.where('order_date = :order_date and user_id = :user_id', 
+                      { order_date: Date.today, user_id: user.id })) 
       @order_mc = Order.new(menu: menu_mc,  
                  course_type: menu_mc.course_type,
                  user: user,
@@ -84,6 +86,8 @@ RSpec.describe Order, type: :model do
                  )
       @order_fc.save! #save first course menu example
     end
+
+    it { expect(@orders.count).to equal(1) } #have first course in order
 
     it { expect(@order_mc).to be_valid }
     it { expect(@order_dr).to be_valid }
@@ -111,6 +115,8 @@ RSpec.describe Order, type: :model do
                )        
       end
 
+      it { expect(@orders.count).to equal(1) } #have first course in order
+
       it { expect(@order_mc).to be_valid }
       it { expect(@order_dr).to be_valid }
       it { expect(@order_fc_new).not_to be_valid }
@@ -119,6 +125,8 @@ RSpec.describe Order, type: :model do
 
       specify  do 
         @order_dr.save!      #save drink menu example
+
+        expect(@orders.count).to equal(2)  #have first course and drink in order
 
         expect(@order_mc).to be_valid 
         expect(@order_fc_new).not_to be_valid 
@@ -130,6 +138,8 @@ RSpec.describe Order, type: :model do
         @order_dr.save!      #save drink menu example
         @order_mc.save!      #save main course menu example
 
+        expect(@orders.count).to equal(3)  #have first course main course and drink in order
+
         expect(@order_fc_new).not_to be_valid 
         expect(@order_mc_new).not_to be_valid 
         expect(@order_dr_new).not_to be_valid
@@ -137,6 +147,8 @@ RSpec.describe Order, type: :model do
 
       specify do
         @order_mc_new.save! #save new main course menu example
+
+        expect(@orders.count).to equal(2)  #have first course and main_course in order
 
         expect(@order_dr).to be_valid 
         expect(@order_mc).not_to be_valid 
@@ -147,92 +159,16 @@ RSpec.describe Order, type: :model do
       specify do
         @order_mc_new.save! #save new main course menu example
         @order_dr_new.save! #save new drink menu example
+
+        expect(@orders.count).to equal(3)  #have first course main course and drink in order
         
         expect(@order_dr).not_to be_valid 
         expect(@order_mc).not_to be_valid 
         expect(@order_fc_new).not_to be_valid    
       end
-
-
     end
-
-
   end
 
-    # describe "main course be valid" do
-    #   before do 
-    #     @order_mc = Order.new(menu: menu_mc,  
-    #            course_type: menu_mc.course_type,
-    #            user: user,
-    #            order_date: Date.today
-    #            )
-    #   end
-    #   it { expect(@order_mc).to be_valid }
-
-    #   describe "drink be valid" do
-    #     before do 
-    #       @order_dr = Order.new(menu: menu_dr,  
-    #              course_type: menu_dr.course_type,
-    #              user: user,
-    #              order_date: Date.today
-    #              )
-    #       @order_mc.save! #save main_course menu example
-    #     end
-    #     it { expect(@order_dr).to be_valid }
-
-    #     describe "can be next items in order: 'first course', 'main course', 'drink' and only they" do
-    #       before do 
-    #         @order_dr.save! #save drink menu example
-    #         @orders = (Order.where('order_date = :order_date and user_id = :user_id', { order_date: Date.today, user_id: user.id })) 
-
-    #       end
-
-          # specify "check that order may contain 3 items: 'first course', 'main course', 'drink' " do
-          #   course_types = Rails.configuration.valid_course_type_values.map(&:downcase)
-
-          #   @orders.each do |order|
-          #     it { expect(course_types.include?(order.course_type.name.downcase)).to be_truthy  }
-          #   end
-
-          #   it { expect(@orders.count).to equal(course_types.count)}
-          # end
-
-          # specify "check that order can not contain other items with course types: 'first course', 'main course', 'drink' " do
-
-
-          #     menu_fc_new = FactoryBot.create(:menu_fc)
-          #     menu_mc_new = FactoryBot.create(:menu_mc) 
-          #     menu_dr_new = FactoryBot.create(:menu_dr) 
-
-          #     @order_fc_new = Order.new(menu: menu_fc_new,  
-          #            course_type: menu_fc_new.course_type,
-          #            user: user,
-          #            order_date: Date.today
-          #            )
-          #     @order_mc_new = Order.new(menu: menu_mc_new,  
-          #            course_type: menu_mc_new.course_type,
-          #            user: user,
-          #            order_date: Date.today
-          #            )
-          #     @order_dr_new = Order.new(menu: menu_dr,  
-          #            course_type: menu_dr.course_type,
-          #            user: user,
-          #            order_date: Date.today
-          #            )       
-
-          #     # it { expect(@order_fc_new).not_to be_valid }
-          #     # it { expect(@order_mc_new).not_to be_valid }
-          #     # it { expect(@order_dr_new).not_to be_valid }
-
-          # end
-
-        # end
-
-    #   end
-    # end
-
-
-  # end
 
 
   describe "when order_date is not today" do

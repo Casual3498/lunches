@@ -68,7 +68,8 @@ group :development, :test do
  
   gem 'database_cleaner'
   gem 'rspec-rails'
-  gem 'factory_bot_rails', '~> 4.8.2'
+  #problem with db:seed in test environment - put require 'factory_bot_rails' in 'spec_helper.rb'
+  gem 'factory_bot_rails', '~> 4.8.2' , :require => false
 #  gem 'faker'
 
 end
