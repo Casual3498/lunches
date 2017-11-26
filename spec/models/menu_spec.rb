@@ -2,18 +2,10 @@ require 'rails_helper'
 
 RSpec.describe Menu, type: :model do
 
-  # let(:first_course) { CourseType.where('lower(name) = ?', "first course").first}
-  # let(:main_course) { CourseType.where('lower(name) = ?', "main course").first}
-  # let(:drink) { CourseType.where('lower(name) = ?', "drink").first}
-  # let(:currency_type) { CurrencyType.first}  
 
-  # it { expect(first_course).to be_present}
-  # it { expect(main_course).to be_present}
-  # it { expect(drink).to be_present}
-  # it { expect(currency_type).to be_present}
 
-  let (:course_type) {FactoryBot.create(:course_type) }
-  let (:currency_type) {FactoryBot.create(:currency_type) }
+  let! (:course_type) {FactoryBot.create(:course_type) }
+  let! (:currency_type) {FactoryBot.create(:currency_type) }
 
   before do
     @menu = Menu.new(name: "Borsch", 
@@ -53,6 +45,24 @@ RSpec.describe Menu, type: :model do
     it { should_not be_valid }
   end
 
+  describe "when name is not unique with same course type (on same date)" do
+    before do
+      menu_with_same_name = @menu.dup
+      menu_with_same_name.name.upcase!
+      menu_with_same_name.cost = menu_with_same_name.cost.to_s #scientific notation do not pass format validation
+      menu_with_same_name.save!
+    end
+
+    it { should_not be_valid }
+
+    describe "must be valid when course type is other" do
+      before { @menu.course_type = FactoryBot.create(:course_type, name: "Other course type") }
+      
+      it { should be_valid }
+    end
+
+  end
+
   describe "when cost is not present" do
     before { @menu.cost = " " }
     it { should_not be_valid }
@@ -88,6 +98,27 @@ RSpec.describe Menu, type: :model do
     before { @menu.currency_type_id = nil }
     it { should_not be_valid }
   end
+
+  describe "when currency_type is different (on same date)" do
+
+    before do
+      @menu_with_other_currency = @menu.dup
+      @menu_with_other_currency.name+="1" #other name
+      @menu_with_other_currency.currency_type = FactoryBot.create(:currency_type, name: "Other currency type")
+      @menu_with_other_currency.cost = @menu_with_other_currency.cost.to_s #scientific notation do not pass format validation
+      @menu_with_other_currency.save!
+    end
+
+    it { should_not be_valid }
+
+    describe "must be valid when currency type is same" do
+      before { @menu.currency_type = @menu_with_other_currency.currency_type }
+      
+      it { should be_valid }
+    end
+
+  end
+
 
   describe "when menu_date is not today" do
     it "should be invalid" do

@@ -38,7 +38,7 @@ RSpec.describe "Authentication", type: :request do
     end
 
     describe "with valid information" do
-      let(:user) { FactoryBot.create(:user) }
+      let!(:user) { FactoryBot.create(:user) }
       before { valid_signin(user) }
 
 
@@ -64,7 +64,7 @@ RSpec.describe "Authentication", type: :request do
   describe "authorization" do
 
     describe "for non-signed-in users" do
-      let(:user) { FactoryBot.create(:user) }
+      let!(:user) { FactoryBot.create(:user) }
 
 
       describe "when attempting to visit a protected page" do
@@ -133,8 +133,8 @@ RSpec.describe "Authentication", type: :request do
     end
 
     describe "as wrong user" do
-      let(:user) { FactoryBot.create(:user) }
-      let(:wrong_user) { FactoryBot.create(:wrong_user) }
+      let!(:user) { FactoryBot.create(:user) }
+      let!(:wrong_user) { FactoryBot.create(:wrong_user) }
       before { valid_signin user, no_capybara: true }
       specify{ expect(controller.current_user).to eq(user) }
 

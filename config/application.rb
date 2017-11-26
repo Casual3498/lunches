@@ -16,5 +16,7 @@ module Lunches
     # -- all .rb files in that directory are automatically loaded.
 
     config.time_zone = 'Moscow' 
+
+    config.valid_course_type_values = ['first course', 'main course', 'drink'] 
   end
 end

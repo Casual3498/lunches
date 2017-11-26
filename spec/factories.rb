@@ -16,7 +16,6 @@ FactoryBot.define do
 
   factory :course_type do
     name   "Example course"
-    id = 5 #for travis ci (see db.seed)
   end
 
   factory :currency_type do
@@ -28,7 +27,30 @@ FactoryBot.define do
     cost "99.98"
     menu_date Date.today
     course_type
-    currency_type
+    currency_type CurrencyType.first
+
+    factory :menu_fc do
+      sequence (:name) { |n| "#{Rails.configuration.valid_course_type_values.map(&:downcase).first} menu item#{n}" }
+      cost "178.06"
+      menu_date Date.today
+      course_type CourseType.where('lower(name) = ?', Rails.configuration.valid_course_type_values.map(&:downcase).first).first
+      currency_type CurrencyType.first
+    end
+    factory :menu_mc do
+      sequence (:name) { |n| "#{Rails.configuration.valid_course_type_values.map(&:downcase).second} menu item#{n}" }
+      cost "201.45"
+      menu_date Date.today
+      course_type CourseType.where('lower(name) = ?', Rails.configuration.valid_course_type_values.map(&:downcase).second).first
+      currency_type CurrencyType.first
+    end
+    factory :menu_dr do
+      sequence (:name) { |n| "#{Rails.configuration.valid_course_type_values.map(&:downcase).third} menu item#{n}" }
+      cost "43.21"
+      menu_date Date.today
+      course_type CourseType.where('lower(name) = ?', Rails.configuration.valid_course_type_values.map(&:downcase).third).first
+      currency_type CurrencyType.first
+    end
+
   end
 
 end

@@ -33,7 +33,6 @@ development:
   timeout: 5000
   username: serge
   password:
-  host: localhost
   
 test:
   adapter: postgresql

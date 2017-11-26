@@ -85,8 +85,8 @@ RSpec.describe "UserPages", type: :request do
 
 
   describe "profile page" do
-    let(:lunches_admin) {FactoryBot.create(:user)}
-    let(:user) { FactoryBot.create(:user) }
+    let!(:lunches_admin) {FactoryBot.create(:user)}
+    let!(:user) { FactoryBot.create(:user) }
     
     before do #sign_in(user)
       lunches_admin.save #if not save then user will be lunches_admin as first registered
@@ -126,8 +126,8 @@ RSpec.describe "UserPages", type: :request do
 
 
   describe "edit" do
-    let(:lunches_admin) {FactoryBot.create(:user)}
-    let(:user) { FactoryBot.create(:user) }
+    let!(:lunches_admin) {FactoryBot.create(:user)}
+    let!(:user) { FactoryBot.create(:user) }
     before do  
       lunches_admin.save #if not save then user will be lunches_admin as first registered
       visit new_user_session_path

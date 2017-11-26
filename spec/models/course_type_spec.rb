@@ -30,11 +30,13 @@ RSpec.describe CourseType, type: :model do
   end
 
 
-  describe "Course type must have name with 'first course', 'main course', 'drink' values" do
-    course_types = [] << 'first course' << 'main course' << 'drink'
+  describe "Course type must have name with 'first course', 'main course', 'drink' values and only these" do
+    course_types = Rails.configuration.valid_course_type_values.map(&:downcase)
     course_types.each do |course_type|
       it { expect(CourseType.where('lower(name) = ?', course_type)).to exist }
     end
+
+    it { expect(CourseType.count).to equal(course_types.count)}
   end
 
 
@@ -43,11 +45,10 @@ RSpec.describe CourseType, type: :model do
     let! (:menu_item) { FactoryBot.create(:menu) }
 
 
-    it "should not destroy course type" do
-       pp menu_item
+    it "should not destroy course type if used and destroy if not" do
+
       course_type = CourseType.find_by_id(menu_item.course_type_id)
       course_type_id = course_type.id
-      pp course_type
 
       expect do
         course_type.destroy

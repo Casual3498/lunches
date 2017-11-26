@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe "Sessions" do
-    let(:user) { FactoryBot.create(:user) }
+    let!(:user) { FactoryBot.create(:user) }
   it "signs user in and out" do
     #user = User.create!(email: "user@example.org", password: "very-secret")
     #user.confirm

@@ -6,10 +6,22 @@ class OrderDateValidator < ActiveModel::Validator
   end
 end
 
-class CourseTypeValidator < ActiveModel::Validator
+class CourseTypeEqualValidator < ActiveModel::Validator
   def validate(record)
     if record.menu && (record.course_type_id != record.menu.course_type_id)
       record.errors[:base] << "Internal error. Course type in order not equal course type in menu."
+    end
+  end
+end
+
+class CourseTypeNameValidator < ActiveModel::Validator
+  def validate(record)
+    course_types = Rails.configuration.valid_course_type_values.map(&:downcase)
+    if record.course_type  && 
+      !course_types.empty? && #don't check if empty
+      !course_types.include?(record.course_type.name.downcase) 
+      
+      record.errors[:base] << "Course type in order must be only: '#{course_types.join("','")}'" 
     end
   end
 end
@@ -25,5 +37,6 @@ class Order < ApplicationRecord
   validates :course_type_id, presence: true, uniqueness: { scope: [:user_id,:order_date],
                                                                         message: "should used once per date" } 
   validates_with OrderDateValidator, fields: [:order_date]
-  validates_with CourseTypeValidator, fields: [:course_type_id,:menu_id]
+  validates_with CourseTypeEqualValidator, fields: [:course_type_id,:menu_id]
+  validates_with CourseTypeNameValidator, fields: [:course_type_id]  
 end
