@@ -66,7 +66,7 @@ class MenusController < ApplicationController
     def set_variables_for_index
  
       @date = params[:date] ? Date.parse(params[:date]) : Date.today
-      @options = {holidays: ['2017-01-01', '2017-07-28'], weekdays: ['2017-07-30']}
+      @options = {holidays: Rails.configuration.holidays, weekdays: Rails.configuration.weekdays}
       @menus_today = Menu.all.where("menu_date='#{Date.today}' ").order(:name)
       @currency_id =  @menus_today.first ? @menus_today.first.currency_type_id : CurrencyType.first.id
       @currency_name = CurrencyType.find_by_id(@currency_id).name

@@ -29,6 +29,19 @@ RSpec.describe CourseType, type: :model do
     it { should_not be_valid }
   end
 
+  describe "settings parameter 'valid_course_type_values' must be array of String" do
+    course_types = Rails.configuration.valid_course_type_values
+
+    #usually don't reached because other specs crashed before with 'error occurred outside of examples'
+
+    it { expect(course_types.is_a?(Array)).to be_truthy } 
+
+    course_types.each do |course_type|
+      it { expect(course_type.is_a?(String)).to be_truthy }
+    end
+  end
+
+
 
   describe "Course type must have name with 'first course', 'main course', 'drink' values and only these" do
     course_types = Rails.configuration.valid_course_type_values.map(&:downcase)

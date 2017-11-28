@@ -7,10 +7,15 @@ RSpec.describe "UserPages", type: :request do
 
   subject { page }
 
+  
+
+
 
   describe "index" do
+    let!(:lunches_admin) {FactoryBot.create(:user)} #first registered user is lunches admin
+    let!(:user) { FactoryBot.create(:user) }
     before do
-      sign_in FactoryBot.create(:user)
+      sign_in lunches_admin
       FactoryBot.create(:user, name: "Bob", email: "bob@example.com")
       FactoryBot.create(:user, name: "Ben", email: "ben@example.com")
       visit users_path
@@ -23,6 +28,19 @@ RSpec.describe "UserPages", type: :request do
       User.all.each do |user|
         expect(page).to have_selector('li', text: user.name)
       end
+    end
+
+    describe "ordinary user can not see list of users and must be redirected on root path" do
+      before do
+        sign_out lunches_admin
+        sign_in user
+        visit users_path
+      end
+
+      it { should have_error_message('You not allowed to see list of users.') }
+
+      it { expect(current_path).to eq root_path }
+
     end
   end
 
@@ -41,8 +59,6 @@ RSpec.describe "UserPages", type: :request do
 
     before { visit new_user_registration_path }
 
-    let(:submit) { "Create my account" }
-
     describe "with invalid information" do
       it "should not create a user" do
         expect { click_button "Sign up" }.not_to change(User, :count)
@@ -57,7 +73,7 @@ RSpec.describe "UserPages", type: :request do
     end
 
     describe "with valid information" do
-      before { fill_valid_signup }
+      before { fill_valid_signup } #fill with email name@example.com
 
       it "should create a user" do
         expect { click_button "Sign up" }.to change(User, :count).by(1)
@@ -85,7 +101,7 @@ RSpec.describe "UserPages", type: :request do
 
 
   describe "profile page" do
-    let!(:lunches_admin) {FactoryBot.create(:user)}
+    let!(:lunches_admin) {FactoryBot.create(:user)} #first registered user is lunches admin
     let!(:user) { FactoryBot.create(:user) }
     
     before do #sign_in(user)
@@ -104,7 +120,7 @@ RSpec.describe "UserPages", type: :request do
 
     it { should have_content(user.name) }
     it { should have_title(user.name) }
-
+  #---------------------------------------------------------------------
     describe "same test for lunches admin" do
       before do
         click_link "Sign out" 
@@ -190,7 +206,7 @@ RSpec.describe "UserPages", type: :request do
           should_not have_link('Sign out')
         end
     end
-
+  #---------------------------------------------------------------------
     describe "same test for lunches admin" do
       before do   
         click_link "Sign out"    
@@ -256,9 +272,18 @@ RSpec.describe "UserPages", type: :request do
           end
       end
 
-
-
     end
+
+  end
+
+
+  describe "first registered user become lunches admin" do
+    let!(:lunches_admin) { FactoryBot.create(:user) } 
+    before { sign_in lunches_admin }
+
+    it { expect(lunches_admin.is_lunches_admin?).to be_truthy }
+
+    it { expect(User.count).to equal(1) }
 
   end
 

@@ -18,9 +18,12 @@
               %i.fa.fa-angle-double-right    
           .table-responsive              
             = calendar(@date, @options)  do |date| 
-              = link_to date.day, orders_path(order_date: date), remote: true 
+              -if (date <= Date.today) && is_weekday?(date, @options) 
+                = link_to date.day, orders_path(order_date: date), remote: true
+              -else #future or holidays
+                = date.day 
 
-    -if current_user.is_lunches_admin?                  
+    -if current_user.is_lunches_admin?
       .panel.cur-menu
         .panel-heading.panel-info
           %h1 

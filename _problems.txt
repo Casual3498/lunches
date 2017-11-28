@@ -1,6 +1,6 @@
 Problems:
 
-1. type ','' as delimiter in cost field, as '48,50'. But shown as '48.50'.
+
 
 2. heroku - red backgroung in modal window
 

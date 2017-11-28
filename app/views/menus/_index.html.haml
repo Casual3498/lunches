@@ -31,7 +31,8 @@
           %ul.errors{id: "ulerrors#{course_type.id}"}         
 
         =menu.input :name
-        =menu.input :cost
+        -# use lang: "en-US" for dot as decimal separator
+        =menu.input :cost, as: :decimal,  input_html: { min: 0, step: 0.01, lang: "en-US" }
         =menu.input :picture, id: :idea_pictures
         =menu.input :course_type_id, input_html: {value: course_type.id}, as: :hidden
         =menu.input :currency_type_id, input_html: {value: @currency_id, class: "currency_id"}, as: :hidden

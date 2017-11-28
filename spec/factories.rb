@@ -1,3 +1,4 @@
+
 FactoryBot.define do
   
   factory :user do
@@ -22,33 +23,42 @@ FactoryBot.define do
     name   "Example currency"
   end  
 
-  factory :menu do
+  factory :menu do                                             
     name "Example menu item"
     cost "99.98"
     menu_date Date.today
     course_type
     currency_type CurrencyType.first
 
+
     factory :menu_fc do
-      sequence (:name) { |n| "#{Rails.configuration.valid_course_type_values.map(&:downcase).first} menu item#{n}" }
-      cost "178.06"
-      menu_date Date.today
-      course_type CourseType.where('lower(name) = ?', Rails.configuration.valid_course_type_values.map(&:downcase).first).first
-      currency_type CurrencyType.first
+      course_type1 = Rails.configuration.valid_course_type_values.is_a?(Array) ? 
+                  CourseType.where('lower(name) = ?',Rails.configuration.valid_course_type_values.map(&:downcase).first).first
+                  : CourseType.first
+
+      sequence (:name) { |n| "#{course_type1.name} menu item#{n}" }
+      cost Faker::Number.decimal(8, 2)
+      course_type course_type1
     end
+
     factory :menu_mc do
-      sequence (:name) { |n| "#{Rails.configuration.valid_course_type_values.map(&:downcase).second} menu item#{n}" }
-      cost "201.45"
-      menu_date Date.today
-      course_type CourseType.where('lower(name) = ?', Rails.configuration.valid_course_type_values.map(&:downcase).second).first
-      currency_type CurrencyType.first
+      course_type2 = Rails.configuration.valid_course_type_values.is_a?(Array) ? 
+                  CourseType.where('lower(name) = ?',Rails.configuration.valid_course_type_values.map(&:downcase).second).first
+                  : CourseType.second   
+
+      sequence (:name) { |n| "#{course_type2.name} menu item#{n}" }
+      cost Faker::Number.decimal(8, 2)
+      course_type course_type2
     end
+
     factory :menu_dr do
-      sequence (:name) { |n| "#{Rails.configuration.valid_course_type_values.map(&:downcase).third} menu item#{n}" }
-      cost "43.21"
-      menu_date Date.today
-      course_type CourseType.where('lower(name) = ?', Rails.configuration.valid_course_type_values.map(&:downcase).third).first
-      currency_type CurrencyType.first
+      course_type3 = Rails.configuration.valid_course_type_values.is_a?(Array) ? 
+                  CourseType.where('lower(name) = ?',Rails.configuration.valid_course_type_values.map(&:downcase).third).first
+                  : CourseType.third     
+
+      sequence (:name) { |n| "#{course_type3.name} menu item#{n}" }
+      cost Faker::Number.decimal(8, 2)
+      course_type course_type3
     end
 
   end

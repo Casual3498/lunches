@@ -1,6 +1,7 @@
 module CalendarHelper
   START_DAY = :monday
 
+
   def calendar(date = Date.today, options = {}, &block)
     defaults = {
       :holidays => [],
@@ -36,11 +37,11 @@ module CalendarHelper
     def header_row
       hr = []
       hr << "<tr>"
-      header.each { |day| 
-        day.each { |key,value| 
+      header.each do |day| 
+        day.each do |key,value| 
           hr << "<th " << "class=#{day_classes(key).inspect}"  <<">" << "#{value}" << "</th>" 
-        }
-      }
+        end
+      end
       hr << '</tr>'
 
       hr.join.html_safe
@@ -59,12 +60,13 @@ module CalendarHelper
     end
 
     def day_classes(day)
-      holidays = options[:holidays]
-      weekdays = options[:weekdays]   
+      # holidays = options[:holidays]
+      # weekdays = options[:weekdays]   
       classes = []
       classes << "today" if day == Date.today
-      classes << "holidays" if ( [0,6].include?(day.wday)  || holidays.include?(day.to_s) ) && !weekdays.include?(day.to_s)
-      classes << "weekdays" if ( (1..5).include?(day.wday) && !holidays.include?(day.to_s) ) || weekdays.include?(day.to_s)
+      # classes << "holidays" if ( [0,6].include?(day.wday)  || holidays.include?(day.to_s) ) && !weekdays.include?(day.to_s)
+      # classes << "weekdays" if ( (1..5).include?(day.wday) && !holidays.include?(day.to_s) ) || weekdays.include?(day.to_s)
+      classes << (CalendarHelper::is_weekday?(day, options) ? "weekdays" : "holidays")
       classes.empty? ? nil : classes.join(" ")
     end
 
@@ -82,4 +84,12 @@ module CalendarHelper
     end
       
   end
+
+  module_function
+  
+  def is_weekday?(day, options)
+    holidays = options[:holidays]
+    weekdays = options[:weekdays]
+    return ( (1..5).include?(day.wday) && !holidays.include?(day.to_s) ) || weekdays.include?(day.to_s) 
+  end  
 end

@@ -17,6 +17,9 @@ module Lunches
 
     config.time_zone = 'Moscow' 
 
+    
     config.valid_course_type_values = ['first course', 'main course', 'drink'] 
+    config.holidays = ['2017-01-01', '2017-11-28']
+    config.weekdays = ['2017-12-02']
   end
 end
