@@ -27,8 +27,9 @@ FactoryBot.define do
     name "Example menu item"
     cost "99.98"
     menu_date Date.today
-    pp "-----------------------"
+    pp "-------factories.rb----------------"
     pp Time.zone.name
+    pp Date.today
     pp "-----------------------"
     course_type
     currency_type CurrencyType.first

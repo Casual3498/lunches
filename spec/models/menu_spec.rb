@@ -15,6 +15,10 @@ RSpec.describe Menu, type: :model do
                      picture: "www.example.com/img/picture.jpg",
                      menu_date: Date.today
                      )
+    pp "--------menu_spec.rb---------------"
+    pp Time.zone.name
+    pp Date.today
+    pp "-----------------------"    
   end
 
   subject { @menu }
