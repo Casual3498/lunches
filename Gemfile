@@ -70,6 +70,7 @@ group :development, :test do
   gem 'rspec-rails'
   #problem with db:seed in test environment - put require 'factory_bot_rails' in 'spec_helper.rb'
   gem 'factory_bot_rails', '~> 4.8.2' , :require => false
+  gem 'rails-controller-testing'
 
 end
 

@@ -23,12 +23,16 @@ class OrdersController < ApplicationController
       @orders_by_course_type = @orders.group_by(&:course_type_id)
       
       @order = Order.new
-
+   
+      respond_to do |format|
+        format.js
+      end 
     else #if not fom js
       redirect_to(root_url)
     end
 
   end
+
 
   def all_index
 

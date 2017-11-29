@@ -5,45 +5,27 @@ require 'rails_helper'
 
 RSpec.describe "MenuPages", type: :request do
   
-  let(:base_title) { "Lunches" }
   let!(:add_holidays) { Rails.configuration.holidays }
   let!(:add_weekdays) { Rails.configuration.weekdays }
-
+  let!(:lunches_admin) { FactoryBot.create(:user) }
+  let!(:ordinary_user) { FactoryBot.create(:user) } 
 
   subject { page }
 
 
-  shared_examples_for "titled" do
-    it "has the right title" do
-      #expect(response).to 
-      #should have_title( "#{base_title} | Sign in")
-      #expect(response).to  have_css 'title', text: "#{base_title}", visible: false
-      should have_title ("#{base_title} | Sign in")
-      #expect(page).to have_selector("title", text: "Sign in", visible: false)
-    end
-  end
-
-
   describe "menus page" do
-    let!(:lunches_admin) { FactoryBot.create(:user) }
-    let!(:user) { FactoryBot.create(:user) } 
-
-
-
-
 
     describe "unsigned user not allowed to see Menus page" do
       before { visit menus_path }
 
-it_should_behave_like "titled"
-
-      it { should have_content('Sign in') }    
-      it { should have_title ("#{base_title} | Sign in") }
+      it_behaves_like "must contain data in content and title" do
+        let!(:data) { 'Sign in' }
+      end
       it { should have_error_message('You need to sign in or sign up before continuing.') }
     end
 
 
-    describe "user must see weekdays" do
+    shared_examples_for "user must see weekdays" do
       before do
         sign_in user
         visit menus_path
@@ -63,7 +45,7 @@ it_should_behave_like "titled"
         end  
 
         specify "user can click on the weekday (today or days in the past)" do
-          within "table" do
+          within "table", class: "calendar" do
             (Date.today.beginning_of_week(:monday)..Date.today.end_of_week(:monday)).each do |date|
               if (date <= Date.today) && #weekday
                 (((1..5).include?(date.wday) && !add_holidays.include?(date.to_s)) || add_weekdays.include?(date.to_s)) 
@@ -80,23 +62,44 @@ it_should_behave_like "titled"
             should have_css 'th', class: "today"
           end
         end
-
       end  
-   #---------------------------------------------------------------------
-      describe "same test for lunches admin" do
-        before do   
-          sign_out user
-          sign_in lunches_admin
-          visit menus_path
-        end
-      end
+    end #shared_examples_for
 
+    it_behaves_like "user must see weekdays" do
+      let!(:user) { ordinary_user }
     end
+    it_behaves_like "user must see weekdays" do
+      let!(:user) { lunches_admin }
+    end
+  end #describe "menus page" 
 
+  shared_examples_for "day menu page" do
+    before do
+      Capybara.current_driver = :selenium
+      sign_in user
+      visit menus_path
+      # @request.env['HTTP_ACCEPT'] = "text/javascript"
+      click_link "#{Date.today.day}"  #this test not be passed in holiday  
+    end
+    after do
+      Capybara.use_default_driver
+    end
+    it "show menu for day" do
+      within('#order-modal') do
 
-
-
+        should have_content("Order on #{Date.today.to_s}") # async
+      end
+      # it { should have_content("Order on #{Date.today.to_s}") } 
+    end
   end
+
+  it_behaves_like "day menu page" do
+    let!(:user) { ordinary_user }
+  end
+  # it_behaves_like "day menu page" do
+  #   let!(:user) { lunches_admin }
+  # end
 
  
 end
+
