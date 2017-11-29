@@ -13,10 +13,13 @@ before_script:
   - bundle exec rake db:seed
   - psql -d travis_ci_test -c 'ALTER SEQUENCE course_types_id_seq RESTART WITH 4;' 
   - psql -d travis_ci_test -c 'ALTER SEQUENCE currency_types_id_seq RESTART WITH 4;'
+
   - wget https://github.com/mozilla/geckodriver/releases/download/v0.19.1/geckodriver-v0.19.1-linux64.tar.gz
   - mkdir geckodriver
   - tar -xzf geckodriver-v0.19.1-linux64.tar.gz -C geckodriver
   - export PATH=$PATH:$PWD/geckodriver
+
+  - export TZ='Europe/Moscow'
 
 test:
   adapter: postgresql
