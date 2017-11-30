@@ -21,6 +21,11 @@ before_script:
 
   - export TZ='Europe/Moscow'
 
+  - "export DISPLAY=:99.0"
+  - "sh -e /etc/init.d/xvfb start"
+  - sleep 3 # give xvfb some time to start
+  
+
 test:
   adapter: postgresql
   database: travis_ci_test
