@@ -19,7 +19,11 @@ module Lunches
 
     
     config.valid_course_type_values = ['first course', 'main course', 'drink'] 
-    config.holidays = ['2017-01-01', '2017-11-28']
+    config.holidays = ['2017-01-01', '2017-11-28', '2017-12-01']
     config.weekdays = ['2017-12-02']
+
+    if Rails.env.test? #for testing (in holidays link for menu unavailable)
+      config.weekdays << Date.today.to_s << (Date.today-7.days).to_s
+    end
   end
 end

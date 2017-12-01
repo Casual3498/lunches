@@ -37,8 +37,12 @@ FactoryBot.define do
                   : CourseType.first
 
       sequence (:name) { |n| "#{course_type1.name} menu item#{n}" }
-      cost Faker::Number.decimal(8, 2)
+      cost Faker::Number.unique.decimal(8, 2)
       course_type course_type1
+
+      factory :menu_fc_skips_validate do
+        to_create {|instance| instance.save(validate: false) }
+      end
     end
 
     factory :menu_mc do
@@ -49,6 +53,9 @@ FactoryBot.define do
       sequence (:name) { |n| "#{course_type2.name} menu item#{n}" }
       cost Faker::Number.decimal(8, 2)
       course_type course_type2
+      factory :menu_mc_skips_validate do
+        to_create {|instance| instance.save(validate: false) }
+      end      
     end
 
     factory :menu_dr do
@@ -59,6 +66,9 @@ FactoryBot.define do
       sequence (:name) { |n| "#{course_type3.name} menu item#{n}" }
       cost Faker::Number.decimal(8, 2)
       course_type course_type3
+      factory :menu_dr_skips_validate do
+        to_create {|instance| instance.save(validate: false) }
+      end
     end
 
   end
