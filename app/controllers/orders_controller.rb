@@ -37,8 +37,8 @@ class OrdersController < ApplicationController
   def all_index
 
     @options =  {holidays: Rails.configuration.holidays, weekdays: Rails.configuration.weekdays}
-    @date = params[:date] ? Date.parse(params[:date]) : Date.today
-    @order_date = params[:order_date] ? Date.parse(params[:order_date]) : Date.today
+    @date = params[:date] ? Date.parse(params[:date]) : Date.current
+    @order_date = params[:order_date] ? Date.parse(params[:order_date]) : Date.current
     @all_orders = Order.includes(:user).where("order_date='#{@order_date}' ").order(:user_id, :course_type_id)
     currency_id =  @all_orders.first ? @all_orders.first.menu.currency_type_id : CurrencyType.first.id
     @currency_name = CurrencyType.find_by_id(currency_id).name

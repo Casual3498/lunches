@@ -26,7 +26,7 @@ FactoryBot.define do
   factory :menu do                                             
     name "Example menu item"
     cost "99.98"
-    menu_date Date.today
+    menu_date Date.current
     course_type
     currency_type CurrencyType.first
 

@@ -11,7 +11,7 @@ RSpec.describe Order, type: :model do
     @order_fc = Order.new(menu: menu_fc,  
                      course_type: menu_fc.course_type,
                      user: user,
-                     order_date: Date.today
+                     order_date: Date.current
                      )
   end
 
@@ -63,7 +63,7 @@ RSpec.describe Order, type: :model do
       @order_example = Order.new(menu: menu_example,  
                  course_type: menu_example.course_type,
                  user: user,
-                 order_date: Date.today
+                 order_date: Date.current
                  )
       @order_fc.save! #save first course menu example
     end
@@ -73,16 +73,16 @@ RSpec.describe Order, type: :model do
   describe "when course_type is first course, main course or drink" do
     before do
       @orders = (Order.where('order_date = :order_date and user_id = :user_id', 
-                      { order_date: Date.today, user_id: user.id })) 
+                      { order_date: Date.current, user_id: user.id })) 
       @order_mc = Order.new(menu: menu_mc,  
                  course_type: menu_mc.course_type,
                  user: user,
-                 order_date: Date.today
+                 order_date: Date.current
                  )
       @order_dr = Order.new(menu: menu_dr,  
                  course_type: menu_dr.course_type,
                  user: user,
-                 order_date: Date.today
+                 order_date: Date.current
                  )
       @order_fc.save! #save first course menu example
     end
@@ -99,19 +99,19 @@ RSpec.describe Order, type: :model do
         @order_fc_new = Order.new(menu: menu_fc_new,  
                course_type: menu_fc_new.course_type,
                user: user,
-               order_date: Date.today
+               order_date: Date.current
                )
         menu_mc_new = FactoryBot.create(:menu_mc)
         @order_mc_new = Order.new(menu: menu_mc_new,  
                course_type: menu_mc_new.course_type,
                user: user,
-               order_date: Date.today
+               order_date: Date.current
                )
         menu_dr_new = FactoryBot.create(:menu_dr)
         @order_dr_new = Order.new(menu: menu_dr_new,  
                course_type: menu_dr_new.course_type,
                user: user,
-               order_date: Date.today
+               order_date: Date.current
                )        
       end
 
@@ -173,7 +173,7 @@ RSpec.describe Order, type: :model do
 
   describe "when order_date is not today" do
     it "should be invalid" do
-      order_dates = [] << Date.yesterday << Date.tomorrow << 100.years.ago << 20.years.from_now 
+      order_dates = [] << (Date.current-1.day) << (Date.current+1.day) << 100.years.ago << 20.years.from_now 
 
       order_dates.each do |invalid_date|
         @order_fc.order_date = invalid_date

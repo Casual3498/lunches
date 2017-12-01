@@ -57,12 +57,12 @@ RSpec.describe "MenuPages", type: :request do
 
         specify "user can click on the weekday (today or days in the past)" do
           within "table", class: "calendar" do
-            (Date.today.beginning_of_week(:monday)..Date.today.end_of_week(:monday)).each do |date|
-              if (date <= Date.today) && #weekday
+            (Date.current.beginning_of_week(:monday)..Date.current.end_of_week(:monday)).each do |date|
+              if (date <= Date.current) && #weekday
                 (((1..5).include?(date.wday) && !add_holidays.include?(date.to_s)) || add_weekdays.include?(date.to_s)) 
                 
                 should have_link("#{date.day}", href: orders_path(order_date: date) ) 
-              else #if date > Date.today or holiday
+              else #if date > Date.current or holiday
                 should have_content("#{date.day}")
                 should_not have_link( href: orders_path(order_date: date) )
               end
@@ -91,9 +91,9 @@ RSpec.describe "MenuPages", type: :request do
       5.times { FactoryBot.create(:menu_mc) } 
       5.times { FactoryBot.create(:menu_dr) }
       #create menu on week ago 
-      5.times { FactoryBot.create(:menu_fc_skips_validate, menu_date: Date.today-7.days) } 
-      5.times { FactoryBot.create(:menu_mc_skips_validate, menu_date: Date.today-7.days) } 
-      5.times { FactoryBot.create(:menu_dr_skips_validate, menu_date: Date.today-7.days) } 
+      5.times { FactoryBot.create(:menu_fc_skips_validate, menu_date: Date.current-7.days) } 
+      5.times { FactoryBot.create(:menu_mc_skips_validate, menu_date: Date.current-7.days) } 
+      5.times { FactoryBot.create(:menu_dr_skips_validate, menu_date: Date.current-7.days) } 
       #set driver for work with js
       Capybara.current_driver = :selenium
       sign_in user
@@ -104,9 +104,9 @@ RSpec.describe "MenuPages", type: :request do
     end
     it "show menu for today" do
 
-      click_link "#{Date.today.day}"  #in application.rb we add today as weekday 
+      click_link "#{Date.current.day}"  #in application.rb we add today as weekday 
       within('#order-modal') do
-        should have_content("Order on #{Date.today.to_s}") 
+        should have_content("Order on #{Date.current.to_s}") 
         should have_css("tr", class: "menu_row", count: 15)
         should have_css("td", class: "name", text: "#{course_type1.name} menu item", count: 5)
         should have_css("td", class: "name", text: "#{course_type2.name} menu item", count: 5)
@@ -120,11 +120,11 @@ RSpec.describe "MenuPages", type: :request do
     it "show menu for day week ago" do
 
       find(".fa-angle-double-left").click #go to last week
-      click_link "#{(Date.today-7.days).day}"  #in application.rb we add day week ago as weekday 
+      click_link "#{(Date.current-7.days).day}"  #in application.rb we add day week ago as weekday 
 
       within('#order-modal') do
 
-        should have_content("Order on #{(Date.today-7.days).to_s}") 
+        should have_content("Order on #{(Date.current-7.days).to_s}") 
 
         should have_css("tr", class: "menu_row", count: 15)
         should have_css("td", class: "name", text: "#{course_type1.name} menu item", count: 5)
@@ -134,6 +134,9 @@ RSpec.describe "MenuPages", type: :request do
 
         click_link "Close"
       end
+
+
+      
     end    
   end
 

@@ -11,8 +11,8 @@ end
 
 class DateValidator < ActiveModel::Validator
   def validate(record)
-    if record.menu_date != Date.today
-      record.errors[:base] << "You can add/edit menu item only for today (\'#{Date.today}\' ) not for \'#{record.menu_date}\' "
+    if record.menu_date != Date.current
+      record.errors[:base] << "You can add/edit menu item only for today (\'#{Date.current}\' ) not for \'#{record.menu_date}\' "
     end
   end
 end

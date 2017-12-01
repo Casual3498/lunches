@@ -13,7 +13,7 @@ RSpec.describe Menu, type: :model do
                      course_type_id: course_type.id,
                      currency_type_id: currency_type.id,
                      picture: "www.example.com/img/picture.jpg",
-                     menu_date: Date.today
+                     menu_date: Date.current
                      )
    
   end
@@ -123,7 +123,7 @@ RSpec.describe Menu, type: :model do
 
   describe "when menu_date is not today" do
     it "should be invalid" do
-      menu_dates = [] << Date.yesterday << Date.tomorrow << 100.years.ago << 20.years.from_now 
+      menu_dates = [] << (Date.current-1.day) << (Date.current+1.day) << 100.years.ago << 20.years.from_now 
 
       menu_dates.each do |invalid_date|
         @menu.menu_date = invalid_date

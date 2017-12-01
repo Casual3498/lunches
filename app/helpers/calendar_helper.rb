@@ -2,7 +2,7 @@ module CalendarHelper
   START_DAY = :monday
 
 
-  def calendar(date = Date.today, options = {}, &block)
+  def calendar(date = Date.current, options = {}, &block)
     defaults = {
       :holidays => [],
       :weekdays => []
@@ -63,7 +63,7 @@ module CalendarHelper
       # holidays = options[:holidays]
       # weekdays = options[:weekdays]   
       classes = []
-      classes << "today" if day == Date.today
+      classes << "today" if day == Date.current
       # classes << "holidays" if ( [0,6].include?(day.wday)  || holidays.include?(day.to_s) ) && !weekdays.include?(day.to_s)
       # classes << "weekdays" if ( (1..5).include?(day.wday) && !holidays.include?(day.to_s) ) || weekdays.include?(day.to_s)
       classes << (CalendarHelper::is_weekday?(day, options) ? "weekdays" : "holidays")

@@ -3,7 +3,7 @@
     %tr.menu_row
       %td.checked 
         %label
-          %input{type: "radio", name: "order_item#{course_type.id}", value: "#{menu.id}", checked: menu.menu_id, disabled:  @order_exists || (@order_date != Date.today) }
+          %input{type: "radio", name: "order_item#{course_type.id}", value: "#{menu.id}", checked: menu.menu_id, disabled:  @order_exists || (@order_date != Date.current) }
       %td.name
         =menu.name
 

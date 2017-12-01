@@ -18,7 +18,7 @@
               %i.fa.fa-angle-double-right    
           .table-responsive              
             = calendar(@date, @options)  do |date| 
-              -if (date <= Date.today) && is_weekday?(date, @options) 
+              -if (date <= Date.current) && is_weekday?(date, @options) 
                 = link_to date.day, orders_path(order_date: date), remote: true
               -else #future or holidays
                 = date.day 
@@ -29,7 +29,7 @@
           %h1 
             Menu on 
             .fa.fa-asterisk
-            #{Date.today.strftime("%A %F")}
+            #{Date.current.strftime("%A %F")}
             .fa.fa-asterisk
         .panel-body
           =render 'currency_select'

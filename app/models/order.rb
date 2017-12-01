@@ -1,7 +1,7 @@
 class OrderDateValidator < ActiveModel::Validator
   def validate(record)
-    if record.order_date != Date.today
-      record.errors[:base] << "You can create order only for today (\'#{Date.today}\') not for \'#{record.order_date}\' "
+    if record.order_date != Date.current
+      record.errors[:base] << "You can create order only for today (\'#{Date.current}\') not for \'#{record.order_date}\' "
     end
   end
 end

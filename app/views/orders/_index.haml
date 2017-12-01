@@ -27,7 +27,7 @@
                             =render 'index_body', course_type: ct
         
         .modal-footer.index-modal
-          -if !@order_exists && (@order_date == Date.today) && !@orders.empty?
+          -if !@order_exists && (@order_date == Date.current) && !@orders.empty?
             %div{id: "alert_create_order"}
               %div{id: "error_explanation_create_order"}        
               %ul.errors{id: "ulerrors_create_order"}     

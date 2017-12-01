@@ -65,9 +65,9 @@ class MenusController < ApplicationController
  
     def set_variables_for_index
  
-      @date = params[:date] ? Date.parse(params[:date]) : Date.today
+      @date = params[:date] ? Date.parse(params[:date]) : Date.current
       @options = {holidays: Rails.configuration.holidays, weekdays: Rails.configuration.weekdays}
-      @menus_today = Menu.all.where("menu_date='#{Date.today}' ").order(:name)
+      @menus_today = Menu.all.where("menu_date='#{Date.current}' ").order(:name)
       @currency_id =  @menus_today.first ? @menus_today.first.currency_type_id : CurrencyType.first.id
       @currency_name = CurrencyType.find_by_id(@currency_id).name
 
@@ -82,7 +82,7 @@ class MenusController < ApplicationController
         @menu.errors.add(:base, :invalid, message: "You can not delete the menu item because there is an order that includes this item.")
         return false
       end
-      if @menu.menu_date != Date.today
+      if @menu.menu_date != Date.current
         @menu.errors.add(:base, :invalid, message: "You can not delete the menu item because this item not from today menu.")
         return false
       end        

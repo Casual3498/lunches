@@ -36,5 +36,5 @@
         =menu.input :picture, id: :idea_pictures
         =menu.input :course_type_id, input_html: {value: course_type.id}, as: :hidden
         =menu.input :currency_type_id, input_html: {value: @currency_id, class: "currency_id"}, as: :hidden
-        =menu.input :menu_date, input_html: {value: Date.today}, as: :hidden
+        =menu.input :menu_date, input_html: {value: Date.current}, as: :hidden
         =menu.button :submit, "Create #{CourseType.find_by_id(course_type.id).name} menu item."
