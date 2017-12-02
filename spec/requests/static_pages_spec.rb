@@ -39,6 +39,8 @@ describe "StaticPages", type: :request do
 
     it { should have_css("img[src^='/assets/kotletki_s_pureshkoi'][src$='.jpg']") }
 
+    it { should have_css("img[alt='Lunch picture']") }
+
     it { should have_css 'title', text: /^#{base_title}$/, visible: false }
 
   end

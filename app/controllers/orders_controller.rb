@@ -8,19 +8,20 @@ class OrdersController < ApplicationController
     if params[:order_date]
       @order_date = Date.parse(params[:order_date])  
       @course_type = CourseType.all
-      @orders = Menu.select("menus.*", "orders.menu_id").joins("LEFT JOIN orders ON menus.id = orders.menu_id and orders.user_id='#{current_user.id}' ").where("menu_date='#{@order_date}' ").order('orders.menu_id' , 'name')
-      @currency_id =  @orders.first ? @orders.first.currency_type_id : CurrencyType.first.id
+      orders = Menu.select("menus.*", "orders.menu_id").joins("LEFT JOIN orders ON menus.id = orders.menu_id and orders.user_id='#{current_user.id}' ").where("menu_date='#{@order_date}' ").order('orders.menu_id' , 'name')
+      @currency_id =  orders.first ? orders.first.currency_type_id : CurrencyType.first.id
       @currency_name = CurrencyType.find_by_id(@currency_id).name
+      
       @order_exist = false
-   
-      @orders.each do |order|
+      orders.each do |order|
         if order.menu_id
           @order_exists = true
           break
         end
       end
+      @edit_order_enable = !@order_exists && (@order_date == Date.current) && !orders.empty?
 
-      @orders_by_course_type = @orders.group_by(&:course_type_id)
+      @orders_by_course_type = orders.group_by(&:course_type_id)
       
       @order = Order.new
    

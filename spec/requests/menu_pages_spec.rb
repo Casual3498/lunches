@@ -82,14 +82,123 @@ RSpec.describe "MenuPages", type: :request do
     it_behaves_like "user must see weekdays" do
       let!(:user) { lunches_admin }
     end
+
+    describe "lunches admin can add items in menu only for today by adding a name and price" do
+      before do
+        Capybara.current_driver = :selenium  #set driver for work with js
+        sign_in lunches_admin
+        visit menus_path
+      end
+      after do
+        Capybara.use_default_driver
+      end
+
+      it { should have_content('Menus') }
+      it { should have_css("h1", text: /Menu on.*#{Date.current.strftime("%A")}.*#{Date.current.to_s}.*/i) } 
+     
+      shared_examples_for "add menu items and check that they is added" do 
+        specify do 
+          within(:css, "tbody", id: "menu_index#{course_type.id}") do
+            #menu for course is empty
+            should_not have_css("tr", class: "menu_row")
+            5.times do |n|
+              fill_in 'Name', with: "shchi №#{n}"
+              fill_in 'Cost', with: "#{(rand()*1000).round(2)}"
+              attach_file("menu[picture]", "#{Rails.root}/spec/support/images/#{n}.jpg")
+              click_button "Create #{course_type.name.downcase} menu item"
+            end
+            #menu for course must have 5 elements, that we just added
+            should have_css("tr", class: "menu_row", count: 5)
+            5.times do |n|
+              should have_css("td", class: "name", text: "shchi №#{n}")
+              should have_css("img[src$='thumb_#{n}.jpg']")
+            end
+          end
+          #check, that items is appeared in order form
+          click_link "#{Date.current.day}" 
+          within(:css, "tbody", id: "order_index#{course_type.id}") do
+            #menu for course must have 5 elements, that we just added
+            should have_css("tr", class: "menu_row", count: 5)
+            5.times do |n|
+              should have_css("td", class: "name", text: "shchi №#{n}")
+              should have_css("img[src$='thumb_#{n}.jpg']")
+            end
+          end
+          #close modal form for order
+          click_link "Cancel"
+
+          #check deleting item
+          #delete first item
+          within(:css, "tbody", id: "menu_index#{course_type.id}") do
+            click_link_or_button 'Delete', match: :first
+          end
+          click_link_or_button 'Yes, Delete This Menu Item'
+          #menu for course must have 4 elements, becouse first of 5 just was deleted
+          within(:css, "tbody", id: "menu_index#{course_type.id}") do
+            should have_css("tr", class: "menu_row", count: 4)
+            #check that first item is deleted
+            should_not have_css("td", class: "name", text: "shchi №0")
+            should_not have_css("img[src$='thumb_0.jpg']")
+          end
+          #check, that items is disappeared in order form
+          click_link "#{Date.current.day}" 
+          within(:css, "tbody", id: "order_index#{course_type.id}") do
+            #menu for course must have 4 elements, becouse 1 of 5 just was deleted
+            should have_css("tr", class: "menu_row", count: 4)
+          end
+          #close modal form for order
+          click_link "Cancel"
+
+          #check updating image (As a Lunches Admin, I can upload photo for each menu item)
+          #create item with no image
+          within(:css, "tbody", id: "menu_index#{course_type.id}") do
+            fill_in 'Name', with: "No image food"
+            fill_in 'Cost', with: "199.98"
+            click_button "Create #{course_type.name.downcase} menu item"
+            #menu for course must have 5 elements, that we just added
+            should have_css("tr", class: "menu_row", count: 5)
+            should have_css("td", class: "name", text: "No image food")
+            should have_css("td", class: "cost", text: "199.98")
+            should have_css("img[src^='/assets/fallback/noimage'][src$='.gif']") 
+            should have_css("img[alt='Noimage']")
+            find(:css,"img[alt='Noimage']").click  
+          end
+          #set image
+          within(:css, "form", id: "newmenu") do
+            attach_file("menu[picture]", "#{Rails.root}/spec/support/images/0.jpg", visible: :all)
+            click_button "Update Menu Item"
+          end
+          #check that image changes
+          within(:css, "tbody", id: "menu_index#{course_type.id}") do
+            should have_css("img[src$='thumb_0.jpg']")
+            should_not have_css("img[src^='/assets/fallback/noimage'][src$='.gif']") 
+            should_not have_css("img[alt='Noimage']")            
+          end
+        end
+      end #shared_examples_for
+
+      it_behaves_like "add menu items and check that they is added" do
+        let!(:course_type) { course_type1 }
+      end
+      it_behaves_like "add menu items and check that they is added" do
+        let!(:course_type) { course_type2 }
+      end
+      it_behaves_like "add menu items and check that they is added" do
+        let!(:course_type) { course_type3 }
+      end
+    end
+
   end #describe "menus page" 
 
+
+
   shared_examples_for "when user click on the weekday(today or days in the past), he can see menu ­list of items with prices" do
+    let!(:menu_items) {[]}
     before do
       #create menu today
-      5.times { FactoryBot.create(:menu_fc) } 
-      5.times { FactoryBot.create(:menu_mc) } 
-      5.times { FactoryBot.create(:menu_dr) }
+      5.times { menu_items << FactoryBot.create(:menu_fc) } 
+      5.times { menu_items << FactoryBot.create(:menu_mc) } 
+      5.times { menu_items << FactoryBot.create(:menu_dr) }
       #create menu on week ago 
       5.times { FactoryBot.create(:menu_fc_skips_validate, menu_date: Date.current-7.days) } 
       5.times { FactoryBot.create(:menu_mc_skips_validate, menu_date: Date.current-7.days) } 
@@ -125,7 +234,6 @@ RSpec.describe "MenuPages", type: :request do
       within('#order-modal') do
 
         should have_content("Order on #{(Date.current-7.days).to_s}") 
-
         should have_css("tr", class: "menu_row", count: 15)
         should have_css("td", class: "name", text: "#{course_type1.name} menu item", count: 5)
         should have_css("td", class: "name", text: "#{course_type2.name} menu item", count: 5)
@@ -134,11 +242,81 @@ RSpec.describe "MenuPages", type: :request do
 
         click_link "Close"
       end
+    end  
 
+    it "user can only choose not more than 1 item of each course type and press Submit" do
+      click_link "#{Date.current.day}"
+      should have_button("Submit") 
 
-      
-    end    
-  end
+      #choose all items one by one
+      menu_items.each do |menuitem|
+        choose("menu_id_#{menuitem.id}")
+      end
+      # #now we have chosen last items in menu of each course types 
+      # #return and choose first drink
+      menu_items.reverse.take(5).each do |menuitem|
+        choose("menu_id_#{menuitem.id}")
+      end
+
+      #check that only one of each course type chosen 
+      chosen = [4,9,10] #we chose last(fifth) first course, last(fifth) main course, and first drink
+      menu_items.each_with_index do |menuitem, indexitem|
+        if chosen.include?(indexitem) 
+          expect(find_by_id("menu_id_#{menuitem.id}")).to be_checked
+          case indexitem
+            when chosen.first
+              expect(menuitem.course_type).to eq(course_type1)
+            when chosen.second
+              expect(menuitem.course_type).to eq(course_type2)
+            when chosen.third
+              expect(menuitem.course_type).to eq(course_type3)                            
+          end
+        else
+          expect(find_by_id("menu_id_#{menuitem.id}")).not_to be_checked
+        end  
+      end
+
+      # should have_button("Submit") 
+      click_button("Submit") #make the order
+      #reopen menu and order modal window
+      click_link "#{Date.current.day}"
+      should_not have_button("Submit") #we already make the order
+      #choose all items disabled (visible for capybara) 
+      menu_items.each_with_index do |menuitem, indexitem|
+        expect(find_by_id("menu_id_#{menuitem.id}", visible: :all)).not_to be_visible
+        #check that chosen menu items still checked
+        if chosen.include?(indexitem) 
+          expect(find_by_id("menu_id_#{menuitem.id}", visible: :all)).to be_checked
+        case indexitem
+          when chosen.first
+            expect(menuitem.course_type).to eq(course_type1)
+          when chosen.second
+            expect(menuitem.course_type).to eq(course_type2)
+          when chosen.third
+            expect(menuitem.course_type).to eq(course_type3)                            
+        end
+        else
+          expect(find_by_id("menu_id_#{menuitem.id}", visible: :all)).not_to be_checked
+        end  
+      end
+      #check, that chosen menu_items on first place in their tables (not worked) 
+      # within(:css, "#order_index#{course_type1.id}", visible: :all) do
+      #   all(:css, "td", class: "checked", visible: :all).each_with_index do |elem, i|
+      #     pp "#{i} elem.checked? = " << elem.checked?.to_s
+      #     pp "#{i} elem.visible? = " << elem.visible?.to_s
+      #     pp "#{i} elem.selected? = " << elem.selected?.to_s
+      #     pp "#{i} elem.disabled? = " << elem.disabled?.to_s
+      #     pp "#{i} elem.readonly? = " << elem.readonly?.to_s
+      #     pp "#{i} elem.text = " << elem.text.to_s          
+      #     pp "#{i} elem.value = " << elem.value.to_s
+      #     pp "#{i} elem = " << elem.to_s
+      #     pp "-------------------------------------"
+      #   end
+        # expect(first(:css, "td", class: "checked", visible: :all)).to be_checked
+      # end
+    end
+  end #shared_examples_for "when user click on the weekday
+
 
   it_behaves_like "when user click on the weekday(today or days in the past), he can see menu ­list of items with prices" do
     let!(:user) { ordinary_user }
@@ -149,4 +327,3 @@ RSpec.describe "MenuPages", type: :request do
 
  
 end
-

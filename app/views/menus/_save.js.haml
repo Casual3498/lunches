@@ -13,6 +13,6 @@ $("#ulerrors#{menu_course_type_id}").html("")
  
   $("#alert#{menu_course_type_id}").removeClass("alert alert-danger") 
   -if (action_name != :create_order)
-    $("#menu-index#{menu.course_type_id}").html("#{escape_javascript(render 'index', course_type: CourseType.find_by_id(menu.course_type_id))}")
+    $("#menu_index#{menu.course_type_id}").html("#{escape_javascript(render 'index', course_type: CourseType.find_by_id(menu.course_type_id))}")
   -else
     $('#order-modal').modal('hide');
