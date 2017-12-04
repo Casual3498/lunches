@@ -19,7 +19,10 @@ end
 
 class OrderExistsValidator < ActiveModel::Validator
   def validate(record)
-    if Order.find_by menu_id: record.id
+    order_exists = Order.find_by menu_id: record.id
+    old_record = Menu.find_by_id record.id
+    #check only if updating name or cost
+    if order_exists && (record.name != old_record.name || record.cost != old_record.cost )
       record.errors[:base] << "You can not change the name/cost of menu item because there is an order that includes this item."
     end
   end
@@ -44,7 +47,7 @@ class Menu < ApplicationRecord
 
   validates_with CurrencyValidator, fields: [:currency_type_id, :menu_date]
   validates_with DateValidator, fields: [:menu_date]
-  validates_with OrderExistsValidator, fields: [:name, :cost]
+  validates_with OrderExistsValidator, fields: [:name, :cost], on: :update
 
   private
   def cost_format

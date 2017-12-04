@@ -2,7 +2,7 @@ class OrdersController < ApplicationController
   
   before_action :permit_user, only: [:all_index]
 
-
+  #order with menu (from menus page)
   def index
 
     if params[:order_date]
@@ -34,7 +34,7 @@ class OrdersController < ApplicationController
 
   end
 
-
+  #all orders on date  (from orders page)
   def all_index
 
     @options =  {holidays: Rails.configuration.holidays, weekdays: Rails.configuration.weekdays}

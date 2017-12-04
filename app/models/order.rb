@@ -2,6 +2,10 @@ class OrderDateValidator < ActiveModel::Validator
   def validate(record)
     if record.order_date != Date.current
       record.errors[:base] << "You can create order only for today (\'#{Date.current}\') not for \'#{record.order_date}\' "
+    else #order_date == Date.current
+      if record.menu && (record.menu.menu_date != Date.current)
+        record.errors[:base] << "You can add in order only menu item from today menu (\'#{Date.current}\') not from menu at \'#{record.menu.menu_date}\' "
+      end
     end
   end
 end

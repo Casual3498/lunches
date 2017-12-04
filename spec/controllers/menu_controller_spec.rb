@@ -80,7 +80,7 @@ RSpec.describe MenusController, type: :controller do
         let!(:menu_item) { FactoryBot.build(:menu_dr) }
       end            
 
-      describe "can not creates a new menu item in base with invalid date" do
+      describe "can not creates a new menu item in base with invalid data" do
         let!(:menu_item) { FactoryBot.build(:menu_fc) }
 
         it "invalid cost" do 
@@ -181,7 +181,6 @@ RSpec.describe MenusController, type: :controller do
         # Expected "http://test.host/home" to be === "http://test.host/".
         expect(response).to redirect_to root_url #action: :home, controller: :static_pages  
       end      
-
     end    
 
   end #POST #create
@@ -308,7 +307,7 @@ RSpec.describe MenusController, type: :controller do
       let!(:menu_item) { FactoryBot.create(:menu_fc) }
       it "signed user get redirected" do
         delete :destroy , params: { id: menu_item.id }, as: :js
-        
+
         expect(response).to have_http_status(:redirect)
         expect(response).to redirect_to root_url
       end      
