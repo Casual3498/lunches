@@ -96,17 +96,19 @@ RSpec.describe "MenuPages", type: :request do
       it { should have_content('Menus') }
       it { should have_css("h1", text: /Menu on.*#{Date.current.strftime("%A")}.*#{Date.current.to_s}.*/i) } 
      
-      shared_examples_for "add menu items and check that they is added" do 
+      shared_examples_for "add/delete/change menu items" do 
         specify do 
           within(:css, "tbody", id: "menu_index#{course_type.id}") do
             #menu for course is empty
             should_not have_css("tr", class: "menu_row")
-            5.times do |n|
-              fill_in 'Name', with: "shchi №#{n}"
-              fill_in 'Cost', with: "#{(rand()*1000).round(2)}"
-              attach_file("menu[picture]", "#{Rails.root}/spec/support/images/#{n}.jpg")
-              click_button "Create #{course_type.name.downcase} menu item"
-            end
+            expect do
+              5.times do |n|
+                fill_in 'Name', with: "shchi №#{n}"
+                fill_in 'Cost', with: "#{(rand()*1000).round(2)}"
+                attach_file("menu[picture]", "#{Rails.root}/spec/support/images/#{n}.jpg")
+                click_button "Create #{course_type.name.downcase} menu item"
+              end
+            end.to change(Menu, :count).by(5) #check that items really added
             #menu for course must have 5 elements, that we just added
             should have_css("tr", class: "menu_row", count: 5)
             5.times do |n|
@@ -129,11 +131,13 @@ RSpec.describe "MenuPages", type: :request do
 
           #check deleting item
           #delete first item
-          within(:css, "tbody", id: "menu_index#{course_type.id}") do
-            click_link_or_button 'Delete', match: :first
-          end
-          click_link_or_button 'Yes, Delete This Menu Item'
-          #menu for course must have 4 elements, becouse first of 5 just was deleted
+          expect do
+            within(:css, "tbody", id: "menu_index#{course_type.id}") do
+              click_link_or_button 'Delete', match: :first
+            end
+            click_link_or_button 'Yes, Delete This Menu Item'
+          end.to change(Menu, :count).by(-1) #check that item really deleted
+          #menu for course must have 4 elements, because first of 5 just was deleted
           within(:css, "tbody", id: "menu_index#{course_type.id}") do
             should have_css("tr", class: "menu_row", count: 4)
             #check that first item is deleted
@@ -143,7 +147,7 @@ RSpec.describe "MenuPages", type: :request do
           #check, that items is disappeared in order form
           click_link "#{Date.current.day}" 
           within(:css, "tbody", id: "order_index#{course_type.id}") do
-            #menu for course must have 4 elements, becouse 1 of 5 just was deleted
+            #menu for course must have 4 elements, because 1 of 5 just was deleted
             should have_css("tr", class: "menu_row", count: 4)
           end
           #close modal form for order
@@ -175,15 +179,75 @@ RSpec.describe "MenuPages", type: :request do
             should_not have_css("img[alt='Noimage']")            
           end
         end
-      end #shared_examples_for
+      end #shared_examples_for "add/delete/change menu items"
 
-      it_behaves_like "add menu items and check that they is added" do
+      shared_examples_for "could not add invalid menu items" do 
+        specify do 
+          within(:css, "tbody", id: "menu_index#{course_type.id}") do
+            #menu for course is empty
+            should_not have_css("tr", class: "menu_row")
+           
+            #fill with invalid cost 
+            #examples with comma as decimal point not passed, because comma translate to dot (by browser?)
+            #costs = %w[-12345678.99 100000000  -1 . 0.001 12,45 ,5 -0,6 -99,6 99999999.999 123.45.67 o O 1O]
+            costs = %w[-12345678.99 100000000  -1 . 0.001  -0,6 -99,6 99999999.999 123.45.67 o O 1O]
+            expect do
+              costs.each_with_index do |cost, n|
+                fill_in 'Name', with: "meat №#{n}"
+                fill_in 'Cost', with: "#{cost}"
+                click_button "Create #{course_type.name.downcase} menu item"
+                #menu for course is still empty
+                should_not have_css("tr", class: "menu_row")  
+                should have_error_message /\AThe form contains.*error.+\z/    
+              end
+            end.to change(Menu, :count).by(0) #check that no item added
+
+            #fill with dublicate name
+            dublicate_name = "banana soup with milk no spicy"
+            #add first item
+            expect do
+              fill_in 'Name', with: "banana soup with milk no spicy"
+              fill_in 'Cost', with: "199.98"
+              click_button "Create #{course_type.name.downcase} menu item"
+            end.to change(Menu, :count).by(1) #check that item really added
+            #menu for course has only item that just added
+            should have_css("tr", class: "menu_row", count: 1)   
+            should have_css("td", class: "name", text: "banana soup with milk no spicy")
+            should have_css("td", class: "cost", text: "199.98")   
+            should_not have_error_message /\AThe form contains.*error.+\z/                    
+            #add second item
+            expect do
+              fill_in 'Name', with: "banana soup with milk no spicy"
+              fill_in 'Cost', with: "45"
+              click_button "Create #{course_type.name.downcase} menu item"
+            end.to change(Menu, :count).by(0) #check that no item added
+            #menu for course still has only 
+            should have_error_message /\AThe form contains.*error.+\z/ 
+            should have_css("tr", class: "menu_row", count: 1)   
+            should have_css("td", class: "name", text: "banana soup with milk no spicy", count: 1)
+            should_not have_css("td", class: "cost", text: "45")      
+
+          end
+        end
+      end #shared_examples_for "could not add invalid menu items"
+
+      it_behaves_like "could not add invalid menu items" do
         let!(:course_type) { course_type1 }
       end
-      it_behaves_like "add menu items and check that they is added" do
+      it_behaves_like "could not add invalid menu items" do
         let!(:course_type) { course_type2 }
       end
-      it_behaves_like "add menu items and check that they is added" do
+      it_behaves_like "could not add invalid menu items" do
+        let!(:course_type) { course_type3 }
+      end      
+
+      it_behaves_like "add/delete/change menu items" do
+        let!(:course_type) { course_type1 }
+      end
+      it_behaves_like "add/delete/change menu items" do
+        let!(:course_type) { course_type2 }
+      end
+      it_behaves_like "add/delete/change menu items" do
         let!(:course_type) { course_type3 }
       end
     end
@@ -317,13 +381,11 @@ RSpec.describe "MenuPages", type: :request do
     end
   end #shared_examples_for "when user click on the weekday
 
-
   it_behaves_like "when user click on the weekday(today or days in the past), he can see menu ­list of items with prices" do
     let!(:user) { ordinary_user }
   end
   it_behaves_like "when user click on the weekday(today or days in the past), he can see menu ­list of items with prices" do
     let!(:user) { lunches_admin }
   end
-
  
 end

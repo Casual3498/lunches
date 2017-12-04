@@ -4,7 +4,7 @@ echo 'API LOGIN/LOGOUT TEST'
 export port=3000
 #export host=http://localhost:$port
 export host=https://lunches.herokuapp.com
-export email=second@lunches.md
+export email=second@lunches.md       #run rake db:populate 
 export password=222222
 
 

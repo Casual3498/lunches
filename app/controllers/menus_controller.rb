@@ -10,22 +10,24 @@ class MenusController < ApplicationController
   end
 
 
-  def new
-    @menu = Menu.new
-  end
+  # def new
+  #   #@menu = Menu.new
+  # end
 
   def create
+
     @menu = Menu.new(menu_params)
     if @menu.save
       set_variables_for_index
     end
+
     respond_to do |format|
       format.js
     end    
   end
 
   def delete
-    @menu = Menu.find(params[:menu_id])
+    @menu = Menu.find(params[:menu_id]) 
   end
 
   def destroy
