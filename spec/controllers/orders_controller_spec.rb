@@ -22,7 +22,7 @@ RSpec.describe OrdersController, type: :controller do
         expect(response).to render_template(:index)
       end
       it "returns http success for week ago menu" do
-        get :index, params: { order_date: (Date.current-7.days).to_s }, as: :js
+        get :index, params: { order_date: (1.week.ago.to_date).to_s }, as: :js
         expect(response).to have_http_status(:success)
         expect(response).to render_template(:index)
       end      
@@ -69,9 +69,9 @@ RSpec.describe OrdersController, type: :controller do
       end
 
       describe "can not create order with invalid data" do
-        let!(:old_menu_fc) { FactoryBot.create(:menu_fc_skips_validate, menu_date: Date.current-7.days) }
-        let!(:old_menu_mc) { FactoryBot.create(:menu_mc_skips_validate, menu_date: Date.current-7.days) }
-        let!(:old_menu_dr) { FactoryBot.create(:menu_dr_skips_validate, menu_date: Date.current-7.days) }
+        let!(:old_menu_fc) { FactoryBot.create(:menu_fc_skips_validate, menu_date: 1.week.ago.to_date) }
+        let!(:old_menu_mc) { FactoryBot.create(:menu_mc_skips_validate, menu_date: 1.week.ago.to_date) }
+        let!(:old_menu_dr) { FactoryBot.create(:menu_dr_skips_validate, menu_date: 1.week.ago.to_date) }
 
         it "old order on old menu date" do
           expect{
@@ -187,7 +187,7 @@ RSpec.describe OrdersController, type: :controller do
       end
 
       it "returns http success for week ago menu" do
-        get :all_index, params: { order_date: (Date.current-7.days).to_s }, as: :js
+        get :all_index, params: { order_date: (1.week.ago.to_date).to_s }, as: :js
         expect(response).to have_http_status(:success)
         expect(response).to render_template(:all_index)
       end      

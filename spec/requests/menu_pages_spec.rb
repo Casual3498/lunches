@@ -36,7 +36,7 @@ RSpec.describe "MenuPages", type: :request do
     end
 
 
-    shared_examples_for "lunches admin must see weekdays" do
+    shared_examples_for "user must see weekdays" do
       before do
         sign_in user
         visit menus_path
@@ -264,9 +264,9 @@ RSpec.describe "MenuPages", type: :request do
       5.times { menu_items << FactoryBot.create(:menu_mc) } 
       5.times { menu_items << FactoryBot.create(:menu_dr) }
       #create menu on week ago 
-      5.times { FactoryBot.create(:menu_fc_skips_validate, menu_date: Date.current-7.days) } 
-      5.times { FactoryBot.create(:menu_mc_skips_validate, menu_date: Date.current-7.days) } 
-      5.times { FactoryBot.create(:menu_dr_skips_validate, menu_date: Date.current-7.days) } 
+      5.times { FactoryBot.create(:menu_fc_skips_validate, menu_date: 1.week.ago.to_date) } 
+      5.times { FactoryBot.create(:menu_mc_skips_validate, menu_date: 1.week.ago.to_date) } 
+      5.times { FactoryBot.create(:menu_dr_skips_validate, menu_date: 1.week.ago.to_date) } 
       #set driver for work with js
       Capybara.current_driver = :selenium
       sign_in user
@@ -293,11 +293,11 @@ RSpec.describe "MenuPages", type: :request do
     it "show menu for day week ago" do
 
       find(".fa-angle-double-left").click #go to last week
-      click_link "#{(Date.current-7.days).day}"  #in application.rb we add day week ago as weekday 
+      click_link "#{(1.week.ago.to_date).day}"  #in application.rb we add day week ago as weekday 
 
       within('#order-modal') do
 
-        should have_content("Order on #{(Date.current-7.days).to_s}") 
+        should have_content("Order on #{(1.week.ago.to_date).to_s}") 
         should have_css("tr", class: "menu_row", count: 15)
         should have_css("td", class: "name", text: "#{course_type1.name} menu item", count: 5)
         should have_css("td", class: "name", text: "#{course_type2.name} menu item", count: 5)

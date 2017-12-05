@@ -10,9 +10,9 @@ RSpec.describe "OrderPages", type: :request do
   let!(:menu_mc) { FactoryBot.create(:menu_mc) }
   let!(:menu_dr) { FactoryBot.create(:menu_dr) }
     #create menu on week ago 
-  let!(:menu_fc_old) { FactoryBot.create(:menu_fc_skips_validate, menu_date: Date.current-7.days) } 
-  let!(:menu_mc_old) { FactoryBot.create(:menu_mc_skips_validate, menu_date: Date.current-7.days) } 
-  let!(:menu_dr_old) { FactoryBot.create(:menu_dr_skips_validate, menu_date: Date.current-7.days) } 
+  let!(:menu_fc_old) { FactoryBot.create(:menu_fc_skips_validate, menu_date: 1.week.ago.to_date ) } 
+  let!(:menu_mc_old) { FactoryBot.create(:menu_mc_skips_validate, menu_date: 1.week.ago.to_date) } 
+  let!(:menu_dr_old) { FactoryBot.create(:menu_dr_skips_validate, menu_date: 1.week.ago.to_date) } 
   before do
     #create today orders
     #for ordinary user
@@ -25,13 +25,13 @@ RSpec.describe "OrderPages", type: :request do
     FactoryBot.create(:order, user: lunches_admin, menu: menu_dr, course_type: menu_dr.course_type) 
     #create old (week ago) orders
     #for ordinary user
-    FactoryBot.create(:order_skips_validate, user: ordinary_user, menu: menu_fc_old, course_type: menu_fc_old.course_type, order_date: Date.current-7.days)
-    FactoryBot.create(:order_skips_validate, user: ordinary_user, menu: menu_mc_old, course_type: menu_mc_old.course_type, order_date: Date.current-7.days)
-    FactoryBot.create(:order_skips_validate, user: ordinary_user, menu: menu_dr_old, course_type: menu_dr_old.course_type, order_date: Date.current-7.days)
+    FactoryBot.create(:order_skips_validate, user: ordinary_user, menu: menu_fc_old, course_type: menu_fc_old.course_type, order_date: 1.week.ago.to_date)
+    FactoryBot.create(:order_skips_validate, user: ordinary_user, menu: menu_mc_old, course_type: menu_mc_old.course_type, order_date: 1.week.ago.to_date)
+    FactoryBot.create(:order_skips_validate, user: ordinary_user, menu: menu_dr_old, course_type: menu_dr_old.course_type, order_date: 1.week.ago.to_date)
     #for lunches admin
-    FactoryBot.create(:order_skips_validate, user: lunches_admin, menu: menu_fc_old, course_type: menu_fc_old.course_type, order_date: Date.current-7.days)
-    FactoryBot.create(:order_skips_validate, user: lunches_admin, menu: menu_mc_old, course_type: menu_mc_old.course_type, order_date: Date.current-7.days)
-    FactoryBot.create(:order_skips_validate, user: lunches_admin, menu: menu_dr_old, course_type: menu_dr_old.course_type, order_date: Date.current-7.days)        
+    FactoryBot.create(:order_skips_validate, user: lunches_admin, menu: menu_fc_old, course_type: menu_fc_old.course_type, order_date: 1.week.ago.to_date)
+    FactoryBot.create(:order_skips_validate, user: lunches_admin, menu: menu_mc_old, course_type: menu_mc_old.course_type, order_date: 1.week.ago.to_date)
+    FactoryBot.create(:order_skips_validate, user: lunches_admin, menu: menu_dr_old, course_type: menu_dr_old.course_type, order_date: 1.week.ago.to_date)        
   end
   subject { page }
 
@@ -149,7 +149,7 @@ RSpec.describe "OrderPages", type: :request do
             should have_css("td", class: "user_name", text: "#{lunches_admin.name}", count: 1)
             #check sum
             within(:css, "tr", class: "sum_row") do
-              sum = ((menu_fc.cost+menu_mc.cost+menu_dr.cost)*2).to_s
+              sum = ((menu_fc_old.cost+menu_mc_old.cost+menu_dr_old.cost)*2).to_s
               should have_css("td", class: "all_sum", text: "#{sum}")
             end
           end
