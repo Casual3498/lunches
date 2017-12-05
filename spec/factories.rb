@@ -73,4 +73,14 @@ FactoryBot.define do
 
   end
 
+  factory :order do
+    order_date Date.current
+    menu
+    course_type
+    user
+    factory :order_skips_validate do
+      to_create {|instance| instance.save(validate: false) }
+    end    
+  end
+
 end

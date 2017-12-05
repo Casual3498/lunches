@@ -2,7 +2,7 @@
   .col-xs-12        
     .panel
       .panel-heading.panel-info
-        %h1 Orders on #{@order_date}
+        %h1 Orders on #{@order_date.strftime("%A %F")}
       .panel-body
         #orders                                         
           .table-responsive

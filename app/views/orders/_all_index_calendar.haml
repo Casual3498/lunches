@@ -13,5 +13,8 @@
             = link_to date: @date.next_week do
               %i.fa.fa-angle-double-right    
           .table-responsive              
-            = calendar(@date, @options)  do |date| 
-              = link_to date.day, all_orders_path(order_date: date), remote: true 
+            = calendar(@date, @options)  do |date|         
+              -if (date <= Date.current) && is_weekday?(date, @options) 
+                = link_to date.day, all_orders_path(order_date: date), remote: true 
+              -else #future or holidays
+                = date.day 

@@ -36,7 +36,7 @@ RSpec.describe "MenuPages", type: :request do
     end
 
 
-    shared_examples_for "user must see weekdays" do
+    shared_examples_for "lunches admin must see weekdays" do
       before do
         sign_in user
         visit menus_path
