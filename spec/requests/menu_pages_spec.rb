@@ -86,7 +86,7 @@ RSpec.describe "MenuPages", type: :request do
     describe "lunches admin can add items in menu only for today by adding a name and price" do
       before do
         Capybara.current_driver = :selenium  #set driver for work with js
-        Capybara.default_wait_time = 15
+        Capybara.default_max_wait_time = 3
         sign_in lunches_admin
         visit menus_path
       end
