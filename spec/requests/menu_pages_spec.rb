@@ -107,7 +107,7 @@ RSpec.describe "MenuPages", type: :request do
                 fill_in 'Name', with: "shchi №#{n}"
                 fill_in 'Cost', with: "#{(rand()*1000).round(2)}"
                 attach_file("menu[picture]", "#{Rails.root}/spec/support/images/#{n}.jpg")
-                click_button "Create #{course_type.name.downcase} menu item", wait: 1
+                click_button "Create #{course_type.name.downcase} menu item", wait: 3
               end
             end.to change(Menu, :count).by(5) #check that items really added
             #menu for course must have 5 elements, that we just added
@@ -136,7 +136,7 @@ RSpec.describe "MenuPages", type: :request do
             within(:css, "tbody", id: "menu_index#{course_type.id}") do
               click_link_or_button 'Delete', match: :first
             end
-            click_link_or_button 'Yes, Delete This Menu Item', wait: 1
+            click_link_or_button 'Yes, Delete This Menu Item', wait: 3
           end.to change(Menu, :count).by(-1) #check that item really deleted
           #menu for course must have 4 elements, because first of 5 just was deleted
           within(:css, "tbody", id: "menu_index#{course_type.id}") do
