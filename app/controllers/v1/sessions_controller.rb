@@ -9,6 +9,7 @@ include V1::JsonHelper
 
 
   def create
+
     resource = User.find_for_database_authentication(:email=>params[:data][:attributes][:email])
     return invalid_login_attempt unless resource
 
@@ -30,7 +31,7 @@ include V1::JsonHelper
       cu.save!
       render json: { "data": {"id": "0", "type": "logout_answer", "attributes": {"success": true}}}.to_json, status: :ok, content_type: "application/vnd.api+json"
     else
-      render json: errors_json("Logout error"), status: :internal_server_error, content_type: "application/vnd.api+json"
+      render json: errors_json("Logout error"), status: :unauthorized, content_type: "application/vnd.api+json"
     end  
   end 
 

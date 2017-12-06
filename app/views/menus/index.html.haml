@@ -23,7 +23,7 @@
               -else #future or holidays
                 = date.day 
 
-    -if current_user.is_lunches_admin?
+    -if current_user.is_lunches_admin? && is_weekday?(Date.current, @options) 
       .panel.cur-menu
         .panel-heading.panel-info
           %h1 

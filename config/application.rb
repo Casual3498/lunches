@@ -23,10 +23,10 @@ module Lunches
     config.valid_course_type_values = ['first course', 'main course', 'drink'] 
     config.holidays = ['2017-01-01', '2017-11-28']
     config.weekdays = ['2017-12-02']
+    config.api_begin_time = "10:00am".to_time
 
     if Rails.env.test? #for testing (on holidays link for menu unavailable)
-    #NB! - Date.current called in application.rb not affected by config.time_zone 
-      config.weekdays << Time.now.in_time_zone(config.time_zone).to_date.to_s << (Time.now.in_time_zone(config.time_zone).to_date-7.days).to_s
+       config.weekdays << Time.current.to_date.to_s << (Time.current.to_date-7.days).to_s
     end
   end
 end

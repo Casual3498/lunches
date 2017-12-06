@@ -11,10 +11,10 @@ respond_to :json
   def index
 
     organization_id = 1 #for jsonapi 
-    begin_time = "10:00am" #which can request the order for today through our API at a specific time
-    if Time.now < begin_time   
+    api_begin_time = Rails.configuration.api_begin_time #which can request the order for today through our API at a specific time   
+    if Time.current < api_begin_time   
 
-      render json: errors_json("You not allowed to get orders list before #{begin_time}"), status: :not_acceptable, content_type: "application/vnd.api+json"
+      render json: errors_json("You not allowed to get orders list before #{api_begin_time}"), status: :not_acceptable, content_type: "application/vnd.api+json"
       return
     end
 
@@ -22,6 +22,7 @@ respond_to :json
     date = Date.current
     all_orders = Order.includes(:user).where("order_date='#{date}' ").order(:user_id, :course_type_id)
     currency_id =  all_orders.first ? all_orders.first.menu.currency_type_id : CurrencyType.first.id
+
     currency_name = CurrencyType.find_by_id(currency_id).name
     all_sum = 0.00
     if all_orders.size > 0
