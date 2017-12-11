@@ -10,7 +10,6 @@ class User < ApplicationRecord
 
   #first registered user is lunches admin 
   before_save { self.lunches_admin = true if User.count == 0 }
-  before_destroy { User.second.update!(lunches_admin: true) } #not working if type User.first.delete in console
-
+  before_destroy { User.second.update!(lunches_admin: true) if !User.second.nil? } #not working if type User.first.delete in console
 
 end
