@@ -20,7 +20,7 @@ respond_to :json
 
     #date = params[:date] ? Date.parse(params[:date]) : Date.current
     date = Date.current
-    all_orders = Order.includes(:user).where("order_date='#{date}' ").order(:user_id, :course_type_id)
+    all_orders = Order.includes(:user, :course_type, :menu).where("order_date='#{date}' ").order(:user_id, :course_type_id)
     currency_id =  all_orders.first ? all_orders.first.menu.currency_type_id : CurrencyType.first.id
 
     currency_name = CurrencyType.find_by_id(currency_id).name

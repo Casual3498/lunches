@@ -40,7 +40,7 @@ class OrdersController < ApplicationController
     @options =  {holidays: Rails.configuration.holidays, weekdays: Rails.configuration.weekdays}
     @date = params[:date] ? Date.parse(params[:date]) : Date.current
     @order_date = params[:order_date] ? Date.parse(params[:order_date]) : Date.current
-    @all_orders = Order.includes(:user).where("order_date='#{@order_date}' ").order(:user_id, :course_type_id)
+    @all_orders = Order.includes(:user, :menu, :course_type).where("order_date='#{@order_date}' ").order(:user_id, :course_type_id)
     currency_id =  @all_orders.first ? @all_orders.first.menu.currency_type_id : CurrencyType.first.id
     @currency_name = CurrencyType.find_by_id(currency_id).name
     @all_sum = 0.00
@@ -119,7 +119,7 @@ class OrdersController < ApplicationController
 
     #Confirms that permit user
   def permit_user
-    if (!current_user.is_lunches_admin?) 
+    if (!current_user.lunches_admin?) 
       flash[:alert] = "You not allowed to see all orders."
       respond_to do |format| 
         format.html {redirect_to(root_url)}

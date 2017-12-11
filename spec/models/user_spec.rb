@@ -18,18 +18,18 @@ RSpec.describe User, type: :model do
   it { should respond_to(:remember_me?)} 
   it { should respond_to(:forget_me!)}
   it { should respond_to(:authentication_token) }
-  it { should respond_to(:is_lunches_admin?)}
+  it { should respond_to(:lunches_admin?)}
 
 
   it { should be_valid }
-  it { should_not be_is_lunches_admin }
+  it { should_not be_lunches_admin }
 
 
 
   describe "with saving first user becomes the lunches admin" do
     before { @user.save }
 
-    it { should be_is_lunches_admin }
+    it { should be_lunches_admin }
   end
 
   describe "when name is not present" do

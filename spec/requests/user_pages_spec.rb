@@ -239,7 +239,7 @@ RSpec.describe "UserPages", type: :request do
     let!(:lunches_admin) { FactoryBot.create(:user) } 
     before { sign_in lunches_admin }
 
-    it { expect(lunches_admin.is_lunches_admin?).to be_truthy }
+    it { expect(lunches_admin.lunches_admin?).to be_truthy }
 
     it { expect(User.count).to equal(1) }
 

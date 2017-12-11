@@ -56,7 +56,7 @@ RSpec.describe OrdersController, type: :controller do
                                 "order_item#{menu_mc.course_type.id}" => menu_mc.id,
                                 "order_item#{menu_dr.course_type.id}" => menu_dr.id                              
                               }, as: :js
-        expect(response).to have_http_status(:ok) #also ok(200) with invalid date
+        expect(response).to have_http_status(:ok) #also ok(200) with invalid data
       end
       it "create new order in base" do
         expect{

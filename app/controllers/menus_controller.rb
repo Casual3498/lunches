@@ -59,24 +59,23 @@ class MenusController < ApplicationController
 
     #Confirms an admin user
     def admin_user
-      if (!current_user.is_lunches_admin?)  
+      if (!current_user.lunches_admin?)  
         flash[:alert] = "You not allowed to edit menu."
         redirect_to(root_url)
       end
     end
  
     def set_variables_for_index
- 
       @date = params[:date] ? Date.parse(params[:date]) : Date.current
       @options = {holidays: Rails.configuration.holidays, weekdays: Rails.configuration.weekdays}
-      @menus_today = Menu.all.where("menu_date='#{Date.current}' ").order(:name)
-      @currency_id =  @menus_today.first ? @menus_today.first.currency_type_id : CurrencyType.first.id
-      @currency_name = CurrencyType.find_by_id(@currency_id).name
-
       @currency_type = CurrencyType.all
       @course_type = CourseType.all
 
+      @menus_today = Menu.includes(:course_type, :currency_type).where("menu_date='#{Date.current}' ").order(:name)
       @menus_by_course_type = @menus_today.group_by(&:course_type_id)
+
+      @currency_id =  @menus_today.first ? @menus_today.first.currency_type_id : CurrencyType.first.id
+      @currency_name = CurrencyType.find_by_id(@currency_id).name
     end
 
     def valid_destroy?

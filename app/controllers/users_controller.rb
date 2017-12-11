@@ -15,7 +15,7 @@ class UsersController < ApplicationController
   #Confirms the correct user for see user profile - only owner and lunches admin allowed
   def correct_user
     @user = User.find_by_id(params[:id])
-    if @user == nil || current_user == nil || ((current_user != @user) && (!current_user.is_lunches_admin?))  
+    if @user == nil || current_user == nil || ((current_user != @user) && (!current_user.lunches_admin?))  
       flash[:alert] = "You not allowed to see other users profiles."
       redirect_to(root_url)
     end
@@ -23,7 +23,7 @@ class UsersController < ApplicationController
   
   #Confirms an admin user for see list of users - only lunches admin allowed 
   def admin_user
-    if (!current_user.is_lunches_admin?)  
+    if (!current_user.lunches_admin?)  
       flash[:alert] = "You not allowed to see list of users."
       redirect_to(root_url)
     end

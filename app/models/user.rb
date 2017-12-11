@@ -7,12 +7,10 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :trackable, :validatable
 
   validates :name, presence: true, length: {maximum: 50}
-  # VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i
-  # validates :email, format: { with: VALID_EMAIL_REGEX }
 
+  #first registered user is lunches admin 
+  before_save { self.lunches_admin = true if User.count == 0 }
+  before_destroy { User.second.update!(lunches_admin: true) } #not working if type User.first.delete in console
 
-  def is_lunches_admin?
-    self == User.first
-  end
 
 end
