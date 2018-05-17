@@ -32,10 +32,12 @@ FactoryBot.define do
 
 
     factory :menu_fc do
-      course_type1 = Rails.configuration.valid_course_type_values.is_a?(Array) ? 
-                  CourseType.where('lower(name) = ?',Rails.configuration.valid_course_type_values.map(&:downcase).first).first
-                  : CourseType.first
-
+      course_type1 =  if Rails.configuration.valid_course_type_values.is_a?(Array)  
+                        CourseType.where('lower(name) = ?',
+                          Rails.configuration.valid_course_type_values.map(&:downcase).first).first
+                      else 
+                        CourseType.first
+                      end
       sequence (:name) { |n| "#{course_type1.name} menu item#{n}" }
       cost Faker::Number.unique.decimal(8, 2)
       course_type course_type1
@@ -46,10 +48,12 @@ FactoryBot.define do
     end
 
     factory :menu_mc do
-      course_type2 = Rails.configuration.valid_course_type_values.is_a?(Array) ? 
-                  CourseType.where('lower(name) = ?',Rails.configuration.valid_course_type_values.map(&:downcase).second).first
-                  : CourseType.second   
-
+      course_type2 =  if Rails.configuration.valid_course_type_values.is_a?(Array) 
+                        CourseType.where('lower(name) = ?',
+                          Rails.configuration.valid_course_type_values.map(&:downcase).second).first
+                      else 
+                        CourseType.second
+                      end   
       sequence (:name) { |n| "#{course_type2.name} menu item#{n}" }
       cost Faker::Number.decimal(8, 2)
       course_type course_type2
@@ -59,10 +63,12 @@ FactoryBot.define do
     end
 
     factory :menu_dr do
-      course_type3 = Rails.configuration.valid_course_type_values.is_a?(Array) ? 
-                  CourseType.where('lower(name) = ?',Rails.configuration.valid_course_type_values.map(&:downcase).third).first
-                  : CourseType.third     
-
+      course_type3 =  if Rails.configuration.valid_course_type_values.is_a?(Array) 
+                        CourseType.where('lower(name) = ?',
+                          Rails.configuration.valid_course_type_values.map(&:downcase).third).first
+                      else
+                        CourseType.third
+                      end     
       sequence (:name) { |n| "#{course_type3.name} menu item#{n}" }
       cost Faker::Number.decimal(8, 2)
       course_type course_type3

@@ -9,13 +9,11 @@ class MenusController < ApplicationController
     @menu = Menu.new
   end
 
-
   # def new
   #   #@menu = Menu.new
   # end
 
   def create
-
     @menu = Menu.new(menu_params)
     if @menu.save
       set_variables_for_index
@@ -26,14 +24,17 @@ class MenusController < ApplicationController
     end    
   end
 
+
   def delete
     @menu = Menu.find(params[:menu_id]) 
   end
+
 
   def destroy
     if valid_destroy? && @menu.destroy
       set_variables_for_index
     end
+
     respond_to do |format|
       format.js
     end  
@@ -58,14 +59,15 @@ class MenusController < ApplicationController
     end  
 
     #Confirms an admin user
-    def admin_user
+    def admin_user    
       if (!current_user.lunches_admin?)  
-        flash[:alert] = "You not allowed to edit menu."
+        flash[:alert] = 'You not allowed to edit menu.'
+        
         redirect_to(root_url)
       end
     end
  
-    def set_variables_for_index
+    def set_variables_for_index   
       @date = params[:date] ? Date.parse(params[:date]) : Date.current
       @options = {holidays: Rails.configuration.holidays, weekdays: Rails.configuration.weekdays}
       @currency_type = CurrencyType.all
@@ -78,17 +80,18 @@ class MenusController < ApplicationController
       @currency_name = CurrencyType.find_by_id(@currency_id).name
     end
 
-    def valid_destroy?
+    def valid_destroy?   
       if Order.find_by menu_id: @menu.id
-        @menu.errors.add(:base, :invalid, message: "You can not delete the menu item because there is an order that includes this item.")
+        @menu.errors.add(:base, :invalid, message: 'You can not delete the menu item because there is an order that includes this item.')
+      
         return false
       end
       if @menu.menu_date != Date.current
-        @menu.errors.add(:base, :invalid, message: "You can not delete the menu item because this item not from today menu.")
+        @menu.errors.add(:base, :invalid, message: 'You can not delete the menu item because this item not from today menu.')
+       
         return false
       end        
       true
     end
-
 
 end

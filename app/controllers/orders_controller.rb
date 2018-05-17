@@ -120,7 +120,7 @@ class OrdersController < ApplicationController
     #Confirms that permit user
   def permit_user
     if (!current_user.lunches_admin?) 
-      flash[:alert] = "You not allowed to see all orders."
+      flash[:alert] = 'You not allowed to see all orders.'
       respond_to do |format| 
         format.html {redirect_to(root_url)}
       end
